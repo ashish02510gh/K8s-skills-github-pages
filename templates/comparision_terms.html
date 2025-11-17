@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Azure and Open Source Comparison</title>
+    <style>
+        body {
+            background-color: #0078D7; /* Azure blue background */
+            color: white; /* White text for better contrast */
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+        }
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: white;
+            color: #0078D7; /* Azure blue text */
+        }
+        th {
+            background-color: #0078D7; /* Azure blue header row */
+            color: white; /* White text for headers */
+            padding: 10px;
+        }
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Alternating row color */
+        }
+        tr:hover {
+            background-color: #e0e0e0; /* Hover effect */
+        }
+    </style>
+</head>
+<body>
+    <h1>Azure vs Open Source Terminology Comparison</h1>
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Azure</th>
+            <th>AWS</th>
+            <th>Google Cloud</th>
+            <th>Open Source</th>
+        </tr>
+        <tr>
+            <td>Networking</td>
+            <td>Virtual Network (VNet)</td>
+            <td>Virtual Private Cloud (VPC)</td>
+            <td>Virtual Private Cloud</td>
+            <td>OpenVPN, Calico</td>
+        </tr>
+        <tr>
+            <td>Load Balancing</td>
+            <td>Load Balancer</td>
+            <td>Elastic Load Balancer (ELB)</td>
+            <td>Cloud Load Balancing</td>
+            <td>HAProxy, NGINX</td>
+        </tr>
+        <tr>
+            <td>Application Gateway</td>
+            <td>Application Gateway</td>
+            <td>Application Load Balancer</td>
+            <td>Traffic Director</td>
+            <td>Traefik, Envoy Proxy</td>
+        </tr>
+        <tr>
+            <td>Traffic Management</td>
+            <td>Traffic Manager</td>
+            <td>Route 53</td>
+            <td>Cloud DNS</td>
+            <td>CoreDNS, BIND</td>
+        </tr>
+        <tr>
+            <td>Virtual Network Gateway</td>
+            <td>Virtual Network Gateway</td>
+            <td>VPN Gateway</td>
+            <td>Cloud VPN</td>
+            <td>StrongSwan, OpenVPN</td>
+        </tr>
+        <tr>
+            <td>Virtual WAN</td>
+            <td>Virtual WAN</td>
+            <td>Transit Gateway</td>
+            <td>Network Connectivity Center</td>
+            <td>OpenVPN, WireGuard</td>
+        </tr>
+        <tr>
+            <td>Content Delivery</td>
+            <td>Azure CDN</td>
+            <td>CloudFront</td>
+            <td>Cloud CDN</td>
+            <td>Varnish, Squid</td>
+        </tr>
+        <tr>
+            <td>Serverless</td>
+            <td>Azure Functions</td>
+            <td>AWS Lambda</td>
+            <td>Cloud Functions</td>
+            <td>OpenFaaS, Kubeless</td>
+        </tr>
+        <tr>
+            <td>Storage</td>
+            <td>Blob Storage</td>
+            <td>S3</td>
+            <td>Cloud Storage</td>
+            <td>MinIO, Ceph</td>
+        </tr>
+        <tr>
+            <td>Databases</td>
+            <td>Azure SQL Database</td>
+            <td>RDS</td>
+            <td>Cloud SQL</td>
+            <td>PostgreSQL, MySQL</td>
+        </tr>
+    </table>
+</body>
+</html>

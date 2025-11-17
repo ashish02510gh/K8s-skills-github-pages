@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes & Azure - Modern Web Design</title>
+    <style>
+        body {
+            background-color: #001F3F; /* Dark Azure Blue */
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth; /* Smooth scrolling feature */
+        }
+        header {
+            background-color: #0078D7; /* Azure Blue */
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        nav {
+            text-align: center;
+            padding: 10px;
+            background-color: #005A9E;
+            position: sticky;
+            top: 60px;
+            z-index: 999;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #003366;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .card {
+            background-color: #003366;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 120, 215, 0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        h2 {
+            color: #00A8E8;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0078D7;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .button:hover {
+            background-color: #005A9E;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    Kubernetes & Azure - The Future of Cloud Computing
+</header>
+
+<nav>
+    <a href="#kubernetes">Kubernetes</a>
+    <a href="#azure">Azure Kubernetes Service (AKS)</a>
+    <a href="#web-design">Web Design Trends</a>
+</nav>
+
+<div class="container">
+    <div class="card" id="kubernetes">
+        <h2>What is Kubernetes?</h2>
+        <p>Kubernetes is an open-source container orchestration platform that automates deployment, scaling, and management of containerized applications.</p>
+        <a href="kubernetes.html" class="button">Learn More</a>
+    </div>
+
+    <div class="card" id="azure">
+        <h2>Azure Kubernetes Service (AKS)</h2>
+        <p>Azure Kubernetes Service (AKS) simplifies Kubernetes deployment and management, offering built-in security, scalability, and integration with Azure services.</p>
+        <a href="azure.html" class="button">Explore AKS</a>
+    </div>
+
+    <div class="card" id="web-design">
+        <h2>Latest Web Design Trends</h2>
+        <p>Modern web design embraces **bold typography, interactive animations, dark mode, and AI-driven automation** to enhance user experience.</p>
+        <a href="web-design.html" class="button">Read More</a>
+    </div>
+</div>
+
+</body>
+</html>

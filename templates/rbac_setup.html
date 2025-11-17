@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RBAC Plan for Kubernetes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #333;
+        }
+        .code-block {
+            background-color: #333;
+            color: #eee;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>RBAC Plan for Kubernetes Cluster</h1>
+    <div class="section">
+        <h2>1. Define Roles and Responsibilities</h2>
+        <p>
+            - Identify teams and projects.<br>
+            - Specify access requirements for resources like Pods, Deployments, and ConfigMaps.<br>
+            - Group permissions into roles such as <i>developer, admin, viewer</i>.
+        </p>
+    </div>
+    <div class="section">
+        <h2>2. Use Namespaces for Isolation</h2>
+        <p>
+            - Create separate namespaces for each team or project.<br>
+            - Assign namespace-specific roles using <b>Role</b> and <b>RoleBinding</b>.
+        </p>
+    </div>
+    <div class="section">
+        <h2>3. Create Service Accounts</h2>
+        <p>
+            - Assign service accounts to applications needing API interaction.<br>
+            - Create service accounts within relevant namespaces for better management.
+        </p>
+    </div>
+    <div class="section">
+        <h2>4. Define Roles and ClusterRoles</h2>
+        <p>
+            - Use <b>Role</b> for namespace-scoped permissions.<br>
+            - Use <b>ClusterRole</b> for cluster-wide permissions.
+        </p>
+    </div>
+    <div class="section">
+        <h2>5. Bind Roles to Users and Service Accounts</h2>
+        <p>
+            - Use <b>RoleBinding</b> to assign roles within namespaces.<br>
+            - Use <b>ClusterRoleBinding</b> for cluster-wide role assignments.
+        </p>
+    </div>
+    <div class="section">
+        <h2>6. Implement Least Privilege</h2>
+        <p>
+            - Grant only necessary permissions for each role.<br>
+            - Periodically review and audit permissions to align with current needs.
+        </p>
+    </div>
+    <div class="section">
+        <h2>7. Monitor and Audit</h2>
+        <p>
+            - Enable Kubernetes auditing to track access and changes.<br>
+            - Monitor cluster activity using tools like Prometheus and Grafana.
+        </p>
+    </div>
+    <div class="section">
+        <h2>Example YAML Configurations</h2>
+        <h3>Role for Developers</h3>
+        <div class="code-block">
+apiVersion: rbac.authorization.k8s.io/v1<br>
+kind: Role<br>
+metadata:<br>
+&nbsp;&nbsp;namespace: dev-team<br>
+&nbsp;&nbsp;name: developer-role<br>
+rules:<br>
+- apiGroups: [""]<br>
+&nbsp;&nbsp;resources: ["pods", "services", "configmaps"]<br>
+&nbsp;&nbsp;verbs: ["get", "list", "create", "update", "delete"]
+        </div>
+        <h3>RoleBinding for Developer Group</h3>
+        <div class="code-block">
+apiVersion: rbac.authorization.k8s.io/v1<br>
+kind: RoleBinding<br>
+metadata:<br>
+&nbsp;&nbsp;namespace: dev-team<br>
+&nbsp;&nbsp;name: developer-binding<br>
+subjects:<br>
+- kind: Group<br>
+&nbsp;&nbsp;name: dev-team-group<br>
+&nbsp;&nbsp;apiGroup: rbac.authorization.k8s.io<br>
+roleRef:<br>
+&nbsp;&nbsp;kind: Role<br>
+&nbsp;&nbsp;name: developer-role<br>
+&nbsp;&nbsp;apiGroup: rbac.authorization.k8s.io
+        </div>
+        <h3>ClusterRole for Admins</h3>
+        <div class="code-block">
+apiVersion: rbac.authorization.k8s.io/v1<br>
+kind: ClusterRole<br>
+metadata:<br>
+&nbsp;&nbsp;name: cluster-admin-role<br>
+rules:<br>
+- apiGroups: ["*"]<br>
+&nbsp;&nbsp;resources: ["*"]<br>
+&nbsp;&nbsp;verbs: ["*"]
+        </div>
+        <h3>ClusterRoleBinding for Admin Group</h3>
+        <div class="code-block">
+apiVersion: rbac.authorization.k8s.io/v1<br>
+kind: ClusterRoleBinding<br>
+metadata:<br>
+&nbsp;&nbsp;name: cluster-admin-binding<br>
+subjects:<br>
+- kind: Group<br>
+&nbsp;&nbsp;name: admin-group<br>
+&nbsp;&nbsp;apiGroup: rbac.authorization.k8s.io<br>
+roleRef:<br>
+&nbsp;&nbsp;kind: ClusterRole<br>
+&nbsp;&nbsp;name: cluster-admin-role<br>
+&nbsp;&nbsp;apiGroup: rbac.authorization.k8s.io
+        </div>
+        <h3>ServiceAccount for Applications</h3>
+        <div class="code-block">
+apiVersion: v1<br>
+kind: ServiceAccount<br>
+metadata:<br>
+&nbsp;&nbsp;name: app-service-account<br>
+&nbsp;&nbsp;namespace: dev-team
+        </div>
+    </div>
+</body>
+</html>

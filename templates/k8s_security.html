@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubernetes Cluster Security Guide</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #f0f9ff, #cbf1f5, #a6e3e9);
+      font-family: Arial, sans-serif;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #003d5b;
+    }
+    details {
+      margin-bottom: 15px;
+      background: #f7f9fc;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    summary {
+      font-weight: bold;
+      color: #005f73;
+      cursor: pointer;
+    }
+    summary:hover {
+      color: #0a9396;
+    }
+    pre {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    code {
+      display: block;
+    }
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Kubernetes Cluster Security Guide</h1>
+    <p>A complete guide to secure your Kubernetes cluster, ensure isolation, and protect sensitive data using RBAC and hardening techniques.</p>
+  </header>
+
+  <section>
+    <details>
+      <summary>1. Security Essentials</summary>
+      <h3>Use Secure Defaults</h3>
+      <p>Encrypt sensitive data (e.g., Secrets):</p>
+      <pre><code>
+kind: EncryptionConfiguration
+apiVersion: apiserver.config.k8s.io/v1
+resources:
+  - resources:
+      - secrets
+    providers:
+      - aescbc:
+          keys:
+            - name: key1
+              secret: &lt;base64-encoded-key&gt;
+      - identity: {}
+      </code></pre>
+    </details>
+
+    <details>
+      <summary>2. Cluster Hardening</summary>
+      <h3>etcd Security</h3>
+      <p>Secure communication between etcd nodes:</p>
+      <pre><code>
+--cert-file=/path/to/server.crt
+--key-file=/path/to/server.key
+--trusted-ca-file=/path/to/ca.crt
+      </code></pre>
+      <h3>Kubelet Security</h3>
+      <p>Disable anonymous access:</p>
+      <pre><code>
+--anonymous-auth=false
+--client-ca-file=/path/to/ca.crt
+      </code></pre>
+      <h3>Audit Logging</h3>
+      <p>Enable audit logging:</p>
+      <pre><code>
+apiVersion: audit.k8s.io/v1
+kind: Policy
+rules:
+- level: Metadata
+- level: RequestResponse
+      </code></pre>
+    </details>
+
+    <details>
+      <summary>3. Pod Security Standards</summary>
+      <h3>Pod Security Admission</h3>
+      <p>Restrict privileges and use read-only root filesystem:</p>
+      <pre><code>
+securityContext:
+  readOnlyRootFilesystem: true
+      </code></pre>
+    </details>
+
+    <details>
+      <summary>4. Network Isolation</summary>
+      <h3>NetworkPolicies</h3>
+      <p>Define communication rules:</p>
+      <pre><code>
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: deny-all-egress
+  namespace: default
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  egress: []
+      </code></pre>
+    </details>
+
+    <details>
+      <summary>5. Role-Based Access Control (RBAC)</summary>
+      <h3>Namespace-Specific Permissions</h3>
+      <p>Create a role:</p>
+      <pre><code>
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+      </code></pre>
+      <p>Bind the role:</p>
+      <pre><code>
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User
+  name: jane
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+      </code></pre>
+      <h3>Cluster-Wide Permissions</h3>
+      <p>Create a cluster role:</p>
+      <pre><code>
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cluster-admin
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+      </code></pre>
+      <p>Bind the cluster role:</p>
+      <pre><code>
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cluster-admin-binding
+subjects:
+- kind: User
+  name: admin-user
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+      </code></pre>
+    </details>
+
+    <details>
+      <summary>6. Monitoring and Security Tools</summary>
+      <p>Recommended tools:</p>
+      <ul>
+        <li><strong>Falco:</strong> Real-time security monitoring.</li>
+        <li><strong>Kube-bench:</strong> CIS Kubernetes compliance checks.</li>
+        <li><strong>OPA/Gatekeeper:</strong> Policy enforcement.</li>
+        <li><strong>Trivy:</strong> Vulnerability scanning for container images.</li>
+        <li><strong>Kubernetes Dashboard:</strong> Resource monitoring and visualization.</li>
+      </ul>
+    </details>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Ashish's Kubernetes Security Guide</p>
+  </footer>
+</body>
+</html>

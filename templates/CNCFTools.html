@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNCF Landscape</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f1fa; /* Soft Azure background */
+            color: #003e73; /* Dark Azure text */
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #002b54; /* Deep Azure */
+        }
+        a {
+            color: #006bb6; /* Azure blue for links */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .card {
+            background-color: #ffffff; /* White background for contrast */
+            border: 1px solid #b3d4fc; /* Soft Azure border */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 15px;
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: #004e92;
+        }
+        .card ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .card li {
+            line-height: 1.6;
+            color: #005c99;
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #003e73;
+        }
+    </style>
+</head>
+<body>
+    <h1>CNCF Landscape</h1>
+    <p style="text-align: center;">
+        For more details, visit the official CNCF site: 
+        <a href="https://www.cncf.io/" target="_blank">cncf.io</a>
+    </p>
+    <div class="container">
+        <!-- App Definition and Development -->
+        <div class="card">
+            <h2>1. App Definition and Development</h2>
+            <ul>
+                <li><strong>Application Definition & Image Build:</strong> 
+                    <a href="https://helm.sh/" target="_blank">Helm</a>, 
+                    <a href="https://artifacthub.io/" target="_blank">Artifact Hub</a>
+                </li>
+                <li><strong>Continuous Integration & Delivery:</strong> 
+                    <a href="https://argo-cd.readthedocs.io/" target="_blank">Argo</a>, 
+                    <a href="https://about.gitlab.com/" target="_blank">GitLab</a>, 
+                    <a href="https://www.jenkins.io/" target="_blank">Jenkins</a>, 
+                    <a href="https://spinnaker.io/" target="_blank">Spinnaker</a>
+                </li>
+                <li><strong>Database:</strong> 
+                    <a href="https://www.mysql.com/" target="_blank">MySQL</a>
+                </li>
+                <li><strong>Streaming & Messaging:</strong> No tools listed</li>
+            </ul>
+        </div>
+
+        <!-- Orchestration & Management -->
+        <div class="card">
+            <h2>2. Orchestration & Management</h2>
+            <ul>
+                <li><strong>Scheduling & Orchestration:</strong> 
+                    <a href="https://keda.sh/" target="_blank">KEDA</a>, 
+                    <a href="https://kubernetes.io/" target="_blank">Kubernetes</a>, 
+                    <a href="https://knative.dev/" target="_blank">Knative</a>, 
+                    <a href="https://www.kubeflow.org/" target="_blank">Kubeflow</a>, 
+                    <a href="https://open-cluster-management.io/" target="_blank">Open Cluster Management</a>, 
+                    <a href="https://www.openfunction.dev/" target="_blank">OpenFunction</a>
+                </li>
+                <li><strong>Service Mesh:</strong> 
+                    <a href="https://istio.io/" target="_blank">Istio</a>, 
+                    <a href="https://linkerd.io/" target="_blank">Linkerd</a>, 
+                    <a href="https://www.consul.io/" target="_blank">Consul</a>
+                </li>
+                <li><strong>Service Proxy:</strong> 
+                    <a href="https://www.nginx.com/" target="_blank">NGINX</a>, 
+                    <a href="https://www.haproxy.com/" target="_blank">HAProxy</a>, 
+                    <a href="https://www.envoyproxy.io/" target="_blank">Envoy</a>, 
+                    OpenELB, Netflix OSS
+                </li>
+                <li><strong>Remote Procedure Call:</strong> 
+                    <a href="https://grpc.io/" target="_blank">gRPC</a>
+                </li>
+                <li><strong>API Gateway:</strong> 
+                    <a href="https://traefik.io/" target="_blank">Traefik</a>, 
+                    Envoy Gateway
+                </li>
+                <li><strong>Coordination & Service Discovery:</strong> 
+                    <a href="https://coredns.io/" target="_blank">CoreDNS</a>, 
+                    <a href="https://etcd.io/" target="_blank">ETCD</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Runtime -->
+        <div class="card">
+            <h2>3. Runtime</h2>
+            <ul>
+                <li><strong>Container Runtime:</strong> CRI-O, Containerd, rkt, runc</li>
+                <li><strong>Cloud Native Network:</strong> CNI, Cilium, Flannel, Kube-vip</li>
+                <li><strong>Cloud Native Storage:</strong> CubeFS, Rook, Longhorn</li>
+            </ul>
+        </div>
+
+        <!-- Provisioning -->
+        <div class="card">
+            <h2>4. Provisioning</h2>
+            <ul>
+                <li><strong>Security & Compliance:</strong> cert-manager, KeyCLOAK</li>
+                <li><strong>Container Registry:</strong> 
+                    JFrog Artifactory, Dragonfly, Google Container Registry, 
+                    Alibaba Cloud Container Registry, Amazon Elastic Container Registry, 
+                    Azure Registry, IBM Cloud Container Registry
+                </li>
+                <li><strong>Automation & Configuration:</strong> 
+                    Ansible, Terraform, KubeEdge, OpenStack, Puppet, Akri, Pulumi
+                </li>
+                <li><strong>Key Management:</strong> Vault, OAuth2 Proxy</li>
+            </ul>
+        </div>
+
+        <!-- Observability and Analysis -->
+        <div class="card">
+            <h2>5. Observability and Analysis</h2>
+            <ul>
+                <li><strong>Observability:</strong> Fluentd, Jaeger, Prometheus, Grafana, Elastic, Datadog, Zabbix, Nagios, Splunk, Alibaba, Amazon</li>
+                <li><strong>Chaos Engineering:</strong> ChaosMeta, Chaos Mesh, Litmus, Krkn, PowerfulSeal</li>
+                <li><strong>Continuous Optimization:</strong> KubeCost, OpenCost</li>
+                <li><strong>Feature Flagging:</strong> OpenFeature, FeatureHub, Bucket, DevCycle</li>
+            </ul>
+        </div>
+    </div>
+    <footer>
+        © 2025 CNCF Tools Overview
+    </footer>
+</body>
+</html>

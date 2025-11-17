@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes Microservice Workflow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #333;
+        }
+        .code-block {
+            background-color: #333;
+            color: #eee;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Microservice Workflow in Kubernetes</h1>
+    <div class="section">
+        <h2>1. User Sends a Request</h2>
+        <p>
+            - The user accesses the application via a URL such as <b>https://myapp.example.com</b>.<br>
+            - The request travels over the internet to the Kubernetes cluster's endpoint.
+        </p>
+    </div>
+    <div class="section">
+        <h2>2. DNS Resolves the Domain</h2>
+        <p>
+            - The DNS server resolves the domain name (<i>myapp.example.com</i>) into the public IP of the Load Balancer.<br>
+            - Tools like Azure DNS, Route 53, or Google Cloud DNS handle this step.
+        </p>
+    </div>
+    <div class="section">
+        <h2>3. Load Balancer (L4 Routing)</h2>
+        <p>
+            - A Layer 4 (L4) Load Balancer forwards traffic based on IP and port.<br>
+            - Traffic is sent to the Ingress Controller running inside Kubernetes.<br>
+            - Examples include Azure Load Balancer or AWS ELB.
+        </p>
+    </div>
+    <div class="section">
+        <h2>4. Ingress Controller (L7 Routing)</h2>
+        <p>
+            - The Ingress Controller routes traffic based on hostnames, paths, or other HTTP/HTTPS rules.<br>
+            - SSL/TLS termination occurs at this layer for secure traffic handling.<br>
+            - Examples: NGINX Ingress Controller, Traefik, Istio Gateway.
+        </p>
+        <h3>Ingress Resource Example</h3>
+        <div class="code-block">
+apiVersion: networking.k8s.io/v1<br>
+kind: Ingress<br>
+metadata:<br>
+&nbsp;&nbsp;name: myapp-ingress<br>
+spec:<br>
+&nbsp;&nbsp;rules:<br>
+&nbsp;&nbsp;- host: myapp.example.com<br>
+&nbsp;&nbsp;&nbsp;&nbsp;http:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;paths:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- path: /api<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pathType: Prefix<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backend:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;service:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: backend-service<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number: 8080
+        </div>
+    </div>
+    <div class="section">
+        <h2>5. Kubernetes Service</h2>
+        <p>
+            - The Service directs traffic to appropriate pods using selectors.<br>
+            - Load balancing ensures even traffic distribution across pods.<br>
+            - Example Service types: ClusterIP, NodePort, LoadBalancer.
+        </p>
+        <h3>Service Example</h3>
+        <div class="code-block">
+apiVersion: v1<br>
+kind: Service<br>
+metadata:<br>
+&nbsp;&nbsp;name: backend-service<br>
+spec:<br>
+&nbsp;&nbsp;selector:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;app: backend<br>
+&nbsp;&nbsp;ports:<br>
+&nbsp;&nbsp;- protocol: TCP<br>
+&nbsp;&nbsp;&nbsp;&nbsp;port: 8080<br>
+&nbsp;&nbsp;&nbsp;&nbsp;targetPort: 8080
+        </div>
+    </div>
+    <div class="section">
+        <h2>6. Pods Process the Request</h2>
+        <p>
+            - Pods host the application container and handle the incoming request.<br>
+            - If necessary, pods interact with other backend services, like databases or caching layers.
+        </p>
+    </div>
+    <div class="section">
+        <h2>7. Back-End Communication</h2>
+        <p>
+            - Microservices communicate using internal DNS or service discovery.<br>
+            - Tools like Istio or Linkerd enable advanced communication with retries, traffic shaping, and mTLS.
+        </p>
+    </div>
+    <div class="section">
+        <h2>8. Response to the User</h2>
+        <p>
+            - The response flows back through the layers:<br>
+            Pod → Service → Ingress Controller → Load Balancer → User.<br>
+            - The user sees the processed result in their browser or client application.
+        </p>
+    </div>
+</body>
+</html>

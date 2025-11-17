@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes Cluster on Bare Metal & Beyond</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .interactive {
+            margin: 20px 0;
+            padding: 15px 20px;
+            background: #ecf0f1;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .interactive:hover {
+            background-color: #bdc3c7;
+        }
+        .content {
+            display: none;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background: #eaf5fc;
+            margin-bottom: 20px;
+            transition: all 0.5s;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table th {
+            background: #3498db;
+            color: #fff;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            background: #2c3e50;
+            color: #fff;
+            border-radius: 8px;
+        }
+    </style>
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            content.style.display = content.style.display === "block" ? "none" : "block";
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Kubernetes Cluster on Bare Metal & Beyond</h1>
+
+        <!-- Section 1: Creating Kubernetes Cluster -->
+        <h2>1. Creating Kubernetes Cluster on Bare Metal</h2>
+        <div class="interactive" onclick="toggleContent('cluster-setup')">
+            👉 Click to Expand: Detailed Setup Instructions
+        </div>
+        <div id="cluster-setup" class="content">
+            <p>
+                Setting up an 8-node Kubernetes cluster on bare metal involves:
+            </p>
+            <ol>
+                <li>Prepare 8 nodes with Ubuntu or CentOS, ensuring consistent OS versions and updates.</li>
+                <li>Install Docker as the container runtime on all nodes.</li>
+                <li>Install Kubernetes components (kubeadm, kubectl, kubelet) on each node.</li>
+                <li>Initialize the Kubernetes cluster on the master node:</li>
+                <pre>
+sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+                </pre>
+                <li>Join worker nodes to the cluster using the kubeadm join token:</li>
+                <pre>
+sudo kubeadm join <master-ip>:6443 --token <token> --discovery-token-ca-cert-hash <hash>
+                </pre>
+                <li>Deploy a CNI plugin like Calico for networking:</li>
+                <pre>
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+                </pre>
+            </ol>
+            <p>
+                <strong>Reason:</strong> Bare-metal clusters provide full control and customization for high-performance workloads.<br>
+                <strong>Analogy:</strong> It's like building your own custom PC instead of using a pre-assembled one.
+            </p>
+        </div>
+
+        <!-- Section 2: Automating with Ansible -->
+        <h2>2. Automating Kubernetes Setup with Ansible</h2>
+        <div class="interactive" onclick="toggleContent('ansible-setup')">
+            👉 Click to Expand: Ansible Automation Playbook
+        </div>
+        <div id="ansible-setup" class="content">
+            <p>
+                Automate the cluster setup with this Ansible playbook:
+            </p>
+            <pre>
+- name: Set up Kubernetes Cluster
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+    
+    - name: Install Kubernetes components
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+    
+    - name: Initialize Kubernetes on Master
+      command: kubeadm init --pod-network-cidr=192.168.0.0/16
+      when: inventory_hostname == "master"
+    
+    - name: Join Workers to Cluster
+      command: kubeadm join <master-ip>:6443 --token <token> --discovery-token-ca-cert-hash <hash>
+      when: inventory_hostname != "master"
+    
+    - name: Apply Calico Networking
+      shell: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+      when: inventory_hostname == "master"
+            </pre>
+        </div>
+
+        <!-- Section 3: Table Content -->
+        <h2>3. Summary Table: Description, Reason, Analogy, Action</h2>
+        <div class="interactive" onclick="toggleContent('table-summary')">
+            👉 Click to Expand: Command Summary Table
+        </div>
+        <div id="table-summary" class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Reason</th>
+                        <th>Analogy</th>
+                        <th>Action/Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Initialize Cluster</td>
+                        <td>Establish the cluster control plane</td>
+                        <td>Setting the foundation</td>
+                        <td>sudo kubeadm init --pod-network-cidr=192.168.0.0/16</td>
+                    </tr>
+                    <tr>
+                        <td>Join Worker Nodes</td>
+                        <td>Add nodes to expand the cluster</td>
+                        <td>Adding parts to a machine</td>
+                        <td>sudo kubeadm join ...</td>
+                    </tr>
+                    <tr>
+                        <td>Apply CNI Plugin</td>
+                        <td>Enable pod-to-pod communication</td>
+                        <td>Installing a network driver</td>
+                        <td>kubectl apply -f calico.yaml</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 4: Enterprise-Level Setup -->
+        <h2>4. Enterprise-Level Kubernetes</h2>
+        <div class="interactive" onclick="toggleContent('enterprise-setup')">
+            👉 Click to Expand: Building Enterprise-Level Kubernetes
+        </div>
+        <div id="enterprise-setup" class="content">
+            <p>
+                Steps to make the Kubernetes platform enterprise-ready:
+            </p>
+            <ol>
+                <li>Add high availability with multiple master nodes.</li>
+                <li>Integrate CI/CD pipelines for automated deployments using Jenkins or ArgoCD.</li>
+                <li>Enable monitoring and observability with Prometheus and Grafana.</li>
+                <li>Implement disaster recovery with tools like Velero.</li>
+            </ol>
+        </div>
+
+        <!-- Section 5: Security Aspects -->
+        <h2>5. Kubernetes Security Aspects</h2>
+        <div class="interactive" onclick="toggleContent('security')">
+            👉 Click to Expand: Cluster Security
+        </div>
+        <div id="security" class="content">
+            <p>
+                Enhance security with these best practices:
+            </p>
+            <ul>
+                <li>Enable RBAC for fine-grained access control.</li>
+                <li>Use Pod Security Standards to restrict privileged access.</li>
+                <li>Encrypt Secrets and data in etcd.</li>
+                <li>Monitor runtime behavior with tools like Falco.</li>
+            </ul>
+        </div>
+
+        <footer>
+            🚀 Built with Copilot | Comprehensive Kubernetes Guide | April 2025
+        </footer>
+    </div>
+</body>
+</html>

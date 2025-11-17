@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes Microservice Flow Diagram</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f0f9ff, #cbf1f5, #a6e3e9);
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: #003d5b;
+            font-size: 2.5em;
+        }
+        header p {
+            color: #005f73;
+            font-size: 1.2em;
+        }
+        .diagram-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .diagram {
+            background: #f7f9fc;
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .box {
+            background: #ffffff;
+            border: 2px solid #005f73;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin: 10px auto;
+            text-align: center;
+            font-weight: bold;
+            color: #003d5b;
+        }
+        .arrow {
+            text-align: center;
+            font-size: 1.5em;
+            color: #005f73;
+            margin: 5px auto;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kubernetes Microservice Workflow</h1>
+        <p>A detailed flow diagram capturing all essential components and interactions</p>
+    </header>
+
+    <section class="diagram-container">
+        <div class="diagram">
+            <div class="box">User Request</div>
+            <div class="arrow">↓</div>
+            <div class="box">DNS Resolution</div>
+            <div class="arrow">↓</div>
+            <div class="box">External Load Balancer (L4)</div>
+            <div class="arrow">↓</div>
+            <div class="box">Kubernetes Node</div>
+            <div class="arrow">↓</div>
+            <div class="box">Ingress Controller (L7)</div>
+            <div class="arrow">↓</div>
+            <div class="box">Service Mapping</div>
+            <div class="arrow">↓</div>
+            <div class="box">Cluster Networking</div>
+            <div class="arrow">↓</div>
+            <div class="box">Service Discovery</div>
+            <div class="arrow">↓</div>
+            <div class="box">Kubernetes Services</div>
+            <div class="arrow">↓</div>
+            <div class="box">Service Load Balancing</div>
+            <div class="arrow">↓</div>
+            <div class="box">Pod Communication</div>
+            <div class="arrow">↓</div>
+            <div class="box">Istio Service Mesh (Optional)</div>
+            <div class="arrow">↓</div>
+            <div class="box">Container Execution</div>
+            <div class="arrow">↓</div>
+            <div class="box">Internal Services (e.g., Database)</div>
+            <div class="arrow">↓</div>
+            <div class="box">Cache Layer</div>
+            <div class="arrow">↓</div>
+            <div class="box">Final Processing</div>
+            <div class="arrow">↓</div>
+            <div class="box">Response Assembly</div>
+            <div class="arrow">↓</div>
+            <div class="box">Service Response</div>
+            <div class="arrow">↓</div>
+            <div class="box">Ingress Controller Response</div>
+            <div class="arrow">↓</div>
+            <div class="box">External Load Balancer Response</div>
+            <div class="arrow">↓</div>
+            <div class="box">User Receives Response</div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Kubernetes Workflow Diagram | Designed for Enhanced Clarity</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Services Comparison Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F3F2F1;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #0078D4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #0078D4;
+            color: white;
+        }
+        a {
+            color: #0078D4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cloud Services Comparison Dashboard</h1>
+        <p><b>Overview:</b> This table provides a detailed comparison of cloud-native solutions offered by CNCF/Open-Source projects and cloud providers like Azure, AWS, and Google Cloud.</p>
+        
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>CNCF/Open-Source</th>
+                <th>Azure</th>
+                <th>AWS</th>
+                <th>Google Cloud</th>
+            </tr>
+            <tr>
+                <td><b>Application Definition & CI/CD</b></td>
+                <td><a href="https://helm.sh/">Helm</a>, <a href="https://artifacthub.io/">Artifact Hub</a>, <a href="https://argoproj.github.io/">Argo</a>, <a href="https://about.gitlab.com/">GitLab</a>, <a href="https://www.jenkins.io/">Jenkins</a>, <a href="https://spinnaker.io/">Spinnaker</a></td>
+                <td><a href="https://azure.microsoft.com/en-us/services/devops/">Azure DevOps</a>, GitHub Actions</td>
+                <td><a href="https://aws.amazon.com/devops/">AWS CodePipeline</a>, ECR</td>
+                <td><a href="https://cloud.google.com/build">Cloud Build</a>, Artifact Registry</td>
+            </tr>
+            <tr>
+                <td><b>Database</b></td>
+                <td><a href="https://www.mysql.com/">MySQL</a></td>
+                <td><a href="https://azure.microsoft.com/en-us/services/mysql/">Azure SQL Database</a></td>
+                <td><a href="https://aws.amazon.com/rds/mysql/">Amazon RDS (MySQL)</a></td>
+                <td><a href="https://cloud.google.com/sql/docs/mysql">Cloud SQL (MySQL)</a></td>
+            </tr>
+            <tr>
+                <td><b>Streaming & Messaging</b></td>
+                <td><a href="https://kafka.apache.org/">Kafka</a>, <a href="https://www.rabbitmq.com/">RabbitMQ</a></td>
+                <td><a href="https://azure.microsoft.com/en-us/products/event-hubs/">Azure Event Hub</a>, Service Bus</td>
+                <td><a href="https://aws.amazon.com/kinesis/">Amazon Kinesis</a>, SNS, SQS</td>
+                <td><a href="https://cloud.google.com/pubsub">Pub/Sub</a></td>
+            </tr>
+            <tr>
+                <td><b>Orchestration</b></td>
+                <td><a href="https://kubernetes.io/">Kubernetes</a>, <a href="https://keda.sh/">KEDA</a>, <a href="https://knative.dev/">Knative</a></td>
+                <td><a href="https://azure.microsoft.com/en-us/products/kubernetes-service/">Azure Kubernetes Service (AKS)</a></td>
+                <td><a href="https://aws.amazon.com/eks/">Amazon EKS</a></td>
+                <td><a href="https://cloud.google.com/kubernetes-engine">Google Kubernetes Engine (GKE)</a></td>
+            </tr>
+            <tr>
+                <td><b>Service Mesh</b></td>
+                <td><a href="https://istio.io/">Istio</a>, <a href="https://linkerd.io/">Linkerd</a>, <a href="https://www.consul.io/">Consul</a></td>
+                <td><a href="https://learn.microsoft.com/en-us/azure/architecture/aws-professional/services/service-mesh">Azure Service Mesh</a></td>
+                <td><a href="https://aws.amazon.com/app-mesh/">AWS App Mesh</a></td>
+                <td><a href="https://cloud.google.com/anthos/service-mesh/">Anthos Service Mesh</a></td>
+            </tr>
+            <tr>
+                <td><b>Storage</b></td>
+                <td><a href="https://cubefs.io/en/">CubeFS</a>, <a href="https://rook.io/">ROOK</a>, <a href="https://longhorn.io/">Longhorn</a></td>
+                <td><a href="https://azure.microsoft.com/en-us/products/storage/">Azure Blob Storage</a>, Azure Files</td>
+                <td><a href="https://aws.amazon.com/s3/">Amazon S3</a>, EBS, EFS</td>
+                <td><a href="https://cloud.google.com/storage">Cloud Storage</a>, Filestore</td>
+            </tr>
+            <tr>
+                <td><b>Observability</b></td>
+                <td><a href="https://www.fluentd.org/">Fluentd</a>, <a href="https://www.jaegertracing.io/">Jaeger</a>, <a href="https://prometheus.io/">Prometheus</a>, <a href="https://grafana.com/">Grafana</a></td>
+                <td><a href="https://azure.microsoft.com/en-us/products/monitor/">Azure Monitor</a>, Log Analytics</td>
+                <td><a href="https://aws.amazon.com/cloudwatch/">AWS CloudWatch</a>, X-Ray</td>
+                <td><a href="https://cloud.google.com/products/operations">Google Cloud Monitoring</a></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
