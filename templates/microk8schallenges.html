@@ -1,48 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microservices Architecture Challenges</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fc; /* Azure-themed light blue background */
-            color: #333;
-            margin: 20px;
-            padding: 20px;
-        }
-        h1, h2 {
-            color: #0078D7; /* Azure blue */
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #ffffff;
-        }
-        th, td {
-            padding: 15px;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #0078D7;
-            color: white;
-            text-align: left;
-        }
-        tr:nth-child(even) {
-            background-color: #E6F0FA; /* Light Azure accent */
-        }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <div class="container">
-        <h1>Microservices Architecture Challenges</h1>
-        <p>Understanding the key challenges in microservices architectures, particularly in **container-based environments**, is crucial for building scalable, resilient systems.</p>
+{% block title %}Microservices Architecture Challenges | Understanding Common Pitfalls{% endblock %}
+{% block description %}Comprehensive guide to understanding and addressing challenges in container-based microservices architectures{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-exclamation-triangle"></i> Microservices Architecture Challenges</h1>
+<p>Understanding common challenges and solutions in container-based microservices environments</p>
+{% endblock %}
+
+{% block content %}
+<section class="intro-section">
+            <h2><i class="fas fa-lightbulb"></i> Key Challenges Overview</h2>
+            <p>
+                Understanding the key challenges in microservices architectures, particularly in container-based environments, is crucial for building scalable, resilient systems.
+                This guide explores common pitfalls and provides practical solutions for each challenge.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h2>Challenges and Solutions</h2>
         
         <table>
             <tr>
@@ -89,8 +65,12 @@
             </tr>
         </table>
 
-        <p><strong>Conclusion:</strong> Addressing these challenges ensures a secure, scalable, and reliable microservices architecture, especially within Kubernetes-based environments.</p>
-    </div>
-
-</body>
-</html>
+        <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-light); border-left: 4px solid var(--success); border-radius: 8px;">
+            <h3 style="color: var(--success); margin-top: 0;"><i class="fas fa-check-circle"></i> Key Takeaway</h3>
+            <p>
+                Addressing these challenges ensures a secure, scalable, and reliable microservices architecture, especially within Kubernetes-based environments. 
+                Each solution builds upon cloud-native practices and industry best practices.
+            </p>
+        </div>
+        </section>
+{% endblock %}

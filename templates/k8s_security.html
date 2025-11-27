@@ -1,62 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kubernetes Cluster Security Guide</title>
-  <style>
-    body {
-      background: linear-gradient(135deg, #f0f9ff, #cbf1f5, #a6e3e9);
-      font-family: Arial, sans-serif;
-      color: #333;
-      padding: 20px;
-      line-height: 1.6;
-    }
-    h1, h2, h3 {
-      color: #003d5b;
-    }
-    details {
-      margin-bottom: 15px;
-      background: #f7f9fc;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-    }
-    summary {
-      font-weight: bold;
-      color: #005f73;
-      cursor: pointer;
-    }
-    summary:hover {
-      color: #0a9396;
-    }
-    pre {
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      padding: 10px;
-      border-radius: 5px;
-      overflow-x: auto;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    code {
-      display: block;
-    }
-    footer {
-      margin-top: 20px;
-      text-align: center;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Kubernetes Cluster Security Guide</h1>
-    <p>A complete guide to secure your Kubernetes cluster, ensure isolation, and protect sensitive data using RBAC and hardening techniques.</p>
-  </header>
+{% extends 'base.html' %}
 
-  <section>
+{% block title %}Kubernetes Cluster Security | Security Best Practices{% endblock %}
+{% block description %}Comprehensive guide to securing Kubernetes clusters - RBAC, network policies, image scanning, and hardening{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-shield-alt"></i> Kubernetes Cluster Security</h1>
+<p>A complete guide to secure your Kubernetes cluster, ensure isolation, and protect sensitive data using RBAC and hardening techniques</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
     <details>
       <summary>1. Security Essentials</summary>
       <h3>Use Secure Defaults</h3>
@@ -201,10 +154,5 @@ roleRef:
         <li><strong>Kubernetes Dashboard:</strong> Resource monitoring and visualization.</li>
       </ul>
     </details>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 Ashish's Kubernetes Security Guide</p>
-  </footer>
-</body>
-</html>
+</section>
+{% endblock %}

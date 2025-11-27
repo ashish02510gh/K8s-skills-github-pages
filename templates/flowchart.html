@@ -1,122 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kubernetes Microservice Flow Diagram</title>
-    <style>
-        body {
-            background: linear-gradient(135deg, #f0f9ff, #cbf1f5, #a6e3e9);
-            font-family: Arial, sans-serif;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        header h1 {
-            color: #003d5b;
-            font-size: 2.5em;
-        }
-        header p {
-            color: #005f73;
-            font-size: 1.2em;
-        }
-        .diagram-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .diagram {
-            background: #f7f9fc;
-            border: 2px solid #ccc;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+{% extends 'base.html' %}
+
+{% block title %}Kubernetes Request Flow Diagram | Architecture Visualization{% endblock %}
+{% block description %}Visual guide showing how requests flow through Kubernetes components and microservices{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-diagram-project"></i> Kubernetes Request Flow</h1>
+<p>Understanding how requests flow through Kubernetes components and architecture</p>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .diagram-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2rem;
+        padding: 2rem;
+    }
+    .diagram {
+        background: var(--bg-card);
+        border: 2px solid var(--border);
+        padding: 2rem;
+        border-radius: 12px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: var(--shadow-lg);
         }
         .box {
-            background: #ffffff;
-            border: 2px solid #005f73;
-            border-radius: 5px;
-            padding: 10px 15px;
-            margin: 10px auto;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            color: white;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin: 0.75rem auto;
             text-align: center;
-            font-weight: bold;
-            color: #003d5b;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .box:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
         }
         .arrow {
             text-align: center;
-            font-size: 1.5em;
-            color: #005f73;
-            margin: 5px auto;
-        }
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #666;
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin: 0.5rem auto;
         }
     </style>
-</head>
-<body>
-    <header>
-        <h1>Kubernetes Microservice Workflow</h1>
-        <p>A detailed flow diagram capturing all essential components and interactions</p>
-    </header>
+{% endblock %}
 
-    <section class="diagram-container">
-        <div class="diagram">
-            <div class="box">User Request</div>
-            <div class="arrow">↓</div>
-            <div class="box">DNS Resolution</div>
-            <div class="arrow">↓</div>
-            <div class="box">External Load Balancer (L4)</div>
-            <div class="arrow">↓</div>
-            <div class="box">Kubernetes Node</div>
-            <div class="arrow">↓</div>
-            <div class="box">Ingress Controller (L7)</div>
-            <div class="arrow">↓</div>
-            <div class="box">Service Mapping</div>
-            <div class="arrow">↓</div>
-            <div class="box">Cluster Networking</div>
-            <div class="arrow">↓</div>
-            <div class="box">Service Discovery</div>
-            <div class="arrow">↓</div>
-            <div class="box">Kubernetes Services</div>
-            <div class="arrow">↓</div>
-            <div class="box">Service Load Balancing</div>
-            <div class="arrow">↓</div>
-            <div class="box">Pod Communication</div>
-            <div class="arrow">↓</div>
-            <div class="box">Istio Service Mesh (Optional)</div>
-            <div class="arrow">↓</div>
-            <div class="box">Container Execution</div>
-            <div class="arrow">↓</div>
-            <div class="box">Internal Services (e.g., Database)</div>
-            <div class="arrow">↓</div>
-            <div class="box">Cache Layer</div>
-            <div class="arrow">↓</div>
-            <div class="box">Final Processing</div>
-            <div class="arrow">↓</div>
-            <div class="box">Response Assembly</div>
-            <div class="arrow">↓</div>
-            <div class="box">Service Response</div>
-            <div class="arrow">↓</div>
-            <div class="box">Ingress Controller Response</div>
-            <div class="arrow">↓</div>
-            <div class="box">External Load Balancer Response</div>
-            <div class="arrow">↓</div>
-            <div class="box">User Receives Response</div>
-        </div>
-    </section>
+{% block content %}
+<section class="intro-section">
+            <h2><i class="fas fa-project-diagram"></i> Understanding the Request Journey</h2>
+            <p>
+                This diagram illustrates the complete path a user request takes through a Kubernetes cluster, from initial entry point 
+                through load balancing, service discovery, pod execution, and back to the user. Understanding this flow is crucial for 
+                debugging and optimizing your cloud-native applications.
+            </p>
+        </section>
 
-    <footer>
-        <p>&copy; 2025 Kubernetes Workflow Diagram | Designed for Enhanced Clarity</p>
-    </footer>
-</body>
-</html>
+        <section class="diagram-container">
+            <div class="diagram">
+                <div class="box"><i class="fas fa-user"></i> User Request</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-globe"></i> DNS Resolution</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-server"></i> External Load Balancer (L4)</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-cube"></i> Kubernetes Node</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-code-branch"></i> Ingress Controller (L7)</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-map"></i> Service Mapping</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-network-wired"></i> Cluster Networking</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-search"></i> Service Discovery</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-cogs"></i> Kubernetes Services</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-balance-scale"></i> Load Balancing</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-comments"></i> Pod Communication</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-shield-alt"></i> Service Mesh (Optional)</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-box"></i> Container Execution</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-database"></i> Internal Services</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-bolt"></i> Cache Layer</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-cog"></i> Processing</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-check-circle"></i> Response Assembly</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-reply"></i> Service Response</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-arrow-up"></i> Back Through Ingress</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-arrow-up"></i> Load Balancer Response</div>
+                <div class="arrow">↓</div>
+                <div class="box"><i class="fas fa-check"></i> User Receives Response</div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-book"></i> Key Insights</h2>
+            <ul>
+                <li><strong>DNS Resolution:</strong> Routes domain names to your cluster's public IP</li>
+                <li><strong>Layer 4 Load Balancer:</strong> Distributes traffic across Kubernetes nodes</li>
+                <li><strong>Ingress Controller:</strong> Handles Layer 7 (HTTP/HTTPS) routing and SSL termination</li>
+                <li><strong>Service Discovery:</strong> Automatically finds and connects pods based on service selectors</li>
+                <li><strong>Service Mesh (Optional):</strong> Provides advanced traffic management, security, and observability</li>
+                <li><strong>Pod Communication:</strong> Microservices communicate internally through Kubernetes networking</li>
+                <li><strong>Response Path:</strong> Responses flow back through the same components in reverse order</li>
+            </ul>
+        </section>
+{% endblock %}

@@ -1,62 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ansible Automation for Kubernetes Setup</title>
-  <style>
-    body {
-      background: linear-gradient(135deg, #f0f9ff, #cbf1f5, #a6e3e9);
-      font-family: Arial, sans-serif;
-      color: #333;
-      padding: 20px;
-      line-height: 1.6;
-    }
-    h1, h2, h3 {
-      color: #003d5b;
-    }
-    details {
-      margin-bottom: 15px;
-      background: #f7f9fc;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-    }
-    summary {
-      font-weight: bold;
-      color: #005f73;
-      cursor: pointer;
-    }
-    summary:hover {
-      color: #0a9396;
-    }
-    pre {
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      padding: 10px;
-      border-radius: 5px;
-      overflow-x: auto;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    code {
-      display: block;
-    }
-    footer {
-      margin-top: 20px;
-      text-align: center;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Ansible Automation for Kubernetes Setup</h1>
-    <p>A guide to automate the Kubernetes cluster setup using Ansible playbooks and roles.</p>
-  </header>
+{% extends 'base.html' %}
 
-  <section>
+{% block title %}Ansible Automation for Kubernetes | Deployment Automation{% endblock %}
+{% block description %}Complete guide to automate Kubernetes cluster setup using Ansible playbooks, roles, and best practices{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-cogs"></i> Ansible Automation for Kubernetes</h1>
+<p>A guide to automate the Kubernetes cluster setup using Ansible playbooks and roles</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
     <details>
       <summary>Inventory Configuration</summary>
       <p>Define the inventory of nodes in a file called <code>hosts.yml</code>:</p>
@@ -259,10 +212,5 @@ all:
     executable: /bin/bash
       </code></pre>
     </details>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 Ashish's Kubernetes Automation Guide</p>
-  </footer>
-</body>
-</html>
+</section>
+{% endblock %}

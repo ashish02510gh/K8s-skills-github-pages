@@ -1,46 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CNCF Landscape</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #e8f1fa; /* Soft Azure background */
-            color: #003e73; /* Dark Azure text */
-            margin: 0;
-            padding: 20px;
+{% extends 'base.html' %}
+
+{% block title %}CNCF Landscape | Cloud-Native Tools Overview{% endblock %}
+{% block description %}Comprehensive overview of Cloud Native Computing Foundation landscape and recommended tools across all layers{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-layer-group"></i> CNCF Landscape</h1>
+<p>Cloud-Native tools and technologies across provisioning, containerization, orchestration, and application layers</p>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+    .card {
+        background-color: var(--bg-card);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        width: 100%;
+            max-width: 400px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
         }
-        h1 {
-            text-align: center;
-            color: #002b54; /* Deep Azure */
-        }
-        a {
-            color: #006bb6; /* Azure blue for links */
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-        .card {
-            background-color: #ffffff; /* White background for contrast */
-            border: 1px solid #b3d4fc; /* Soft Azure border */
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            padding: 15px;
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-left-color: var(--primary);
         }
         .card h2 {
             margin-top: 0;
             font-size: 1.2em;
-            color: #004e92;
+            color: var(--primary);
         }
         .card ul {
             list-style-type: none;
@@ -48,23 +43,42 @@
         }
         .card li {
             line-height: 1.6;
-            color: #005c99;
+            color: var(--text-gray);
+            margin-bottom: 0.75rem;
         }
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 0.9em;
-            color: #003e73;
+        .card a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .card a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .card {
+                max-width: 100%;
+            }
         }
     </style>
-</head>
-<body>
-    <h1>CNCF Landscape</h1>
-    <p style="text-align: center;">
-        For more details, visit the official CNCF site: 
-        <a href="https://www.cncf.io/" target="_blank">cncf.io</a>
-    </p>
-    <div class="container">
+{% endblock %}
+
+{% block content %}
+<section class="intro-section">
+            <h2><i class="fas fa-compass"></i> Cloud-Native Ecosystem</h2>
+            <p>
+                The CNCF (Cloud Native Computing Foundation) landscape provides a comprehensive overview of open-source and commercial tools 
+                that help you build, deploy, and manage cloud-native applications. This guide covers tools across all layers of the stack.
+            </p>
+            <p style="text-align: center; margin-top: 2rem;">
+                For more details, visit the official CNCF site: 
+                <a href="https://www.cncf.io/" target="_blank" class="btn">Visit CNCF.io</a>
+            </p>
+        </section>
+
+        <div class="container">
         <!-- App Definition and Development -->
         <div class="card">
             <h2>1. App Definition and Development</h2>
@@ -160,9 +174,5 @@
                 <li><strong>Feature Flagging:</strong> OpenFeature, FeatureHub, Bucket, DevCycle</li>
             </ul>
         </div>
-    </div>
-    <footer>
-        © 2025 CNCF Tools Overview
-    </footer>
-</body>
-</html>
+        </div>
+{% endblock %}

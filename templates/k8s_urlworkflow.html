@@ -1,66 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kubernetes Microservice Workflow</title>
-    <style>
-        body {
-            background: linear-gradient(135deg, #f0f9ff, #cbf1f5, #a6e3e9);
-            font-family: Arial, sans-serif;
-            color: #333;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1, h2, h3 {
-            color: #003d5b;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        header h1 {
-            font-size: 2.5em;
-        }
-        details {
-            margin-bottom: 15px;
-            background: #f7f9fc;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-        }
-        summary {
-            font-weight: bold;
-            color: #005f73;
-            cursor: pointer;
-        }
-        summary:hover {
-            color: #0a9396;
-        }
-        pre {
-            background-color: #1e1e1e;
-            color: #d4d4d4;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        footer {
-            margin-top: 20px;
-            text-align: center;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Microservice Workflow in Kubernetes</h1>
-        <p>A step-by-step guide to how a user request flows through Kubernetes components.</p>
-    </header>
+{% extends 'base.html' %}
 
-    <section>
+{% block title %}Kubernetes Microservice Workflow | Request Flow Guide{% endblock %}
+{% block description %}Step-by-step guide on how user requests flow through Kubernetes microservices architecture and components{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-project-diagram"></i> Microservice Workflow in Kubernetes</h1>
+<p>A step-by-step guide to how a user request flows through Kubernetes components and services</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
         <details open>
             <summary>Step 1: User Sends a Request</summary>
             <p>
@@ -155,12 +104,6 @@ spec:
                 The processed response is sent back through the layers:<br>
                 Pod → Service → Ingress Controller → Load Balancer → User.<br>
                 The user sees the result in their browser or client.
-            </p>
-        </details>
-    </section>
-
-    <footer>
-        <p>&copy; 2025 Kubernetes Workflow Guide. All Rights Reserved.</p>
-    </footer>
-</body>
-</html>
+            </pre>
+</section>
+    {% endblock %}

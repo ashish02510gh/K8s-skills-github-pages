@@ -1,44 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Azure and Open Source Comparison</title>
-    <style>
-        body {
-            background-color: #0078D7; /* Azure blue background */
-            color: white; /* White text for better contrast */
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            text-align: center;
-            color: white;
-        }
-        table {
-            width: 90%;
-            margin: auto;
-            border-collapse: collapse;
-            background-color: white;
-            color: #0078D7; /* Azure blue text */
-        }
-        th {
-            background-color: #0078D7; /* Azure blue header row */
-            color: white; /* White text for headers */
-            padding: 10px;
-        }
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2; /* Alternating row color */
-        }
-        tr:hover {
-            background-color: #e0e0e0; /* Hover effect */
-        }
-    </style>
-</head>
-<body>
-    <h1>Azure vs Open Source Terminology Comparison</h1>
+{% extends 'base.html' %}
+
+{% block title %}Cloud Terminology Comparison | Azure vs AWS vs GCP{% endblock %}
+{% block description %}Comprehensive comparison of cloud terminology across Azure, AWS, Google Cloud, and open-source solutions{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-table"></i> Cloud Terminology Comparison</h1>
+<p>Understand equivalent terminology and services across Azure, AWS, Google Cloud, and open-source platforms</p>
+{% endblock %}
+
+{% block content %}
+<section class="intro-section">
+            <h2><i class="fas fa-cloud"></i> Cloud Services Equivalence</h2>
+            <p>
+                This guide helps you understand how different cloud providers and open-source solutions refer to similar services. 
+                Whether you're migrating between clouds or building multi-cloud architectures, this comparison table will be invaluable.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h2>Services Comparison Table</h2>
     <table>
         <tr>
             <th>Category</th>
@@ -118,5 +98,5 @@
             <td>PostgreSQL, MySQL</td>
         </tr>
     </table>
-</body>
-</html>
+        </section>
+{% endblock %}

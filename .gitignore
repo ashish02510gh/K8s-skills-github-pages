@@ -1,3 +1,28 @@
+# Python virtual environments
+venv/
+test_env/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Pytest cache
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+
 # Compiled source #
 ###################
 *.com
@@ -5,7 +30,6 @@
 *.dll
 *.exe
 *.o
-*.so
 
 # Packages #
 ############

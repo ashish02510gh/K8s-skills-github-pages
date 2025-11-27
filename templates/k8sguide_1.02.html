@@ -1,62 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Setting Up Kubernetes</title>
-  <style>
-    body {
-      background: linear-gradient(135deg, #f0f9ff, #cbf1f5, #a6e3e9);
-      font-family: Arial, sans-serif;
-      color: #333;
-      padding: 20px;
-      line-height: 1.6;
-    }
-    h1, h2, h3 {
-      color: #003d5b;
-    }
-    details {
-      margin-bottom: 15px;
-      background: #f7f9fc;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-    }
-    summary {
-      font-weight: bold;
-      color: #005f73;
-      cursor: pointer;
-    }
-    summary:hover {
-      color: #0a9396;
-    }
-    pre {
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      padding: 10px;
-      border-radius: 5px;
-      overflow-x: auto;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    code {
-      display: block;
-    }
-    footer {
-      margin-top: 20px;
-      text-align: center;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Setting Up Kubernetes on Bare Metal Nodes</h1>
-    <p>A detailed guide to deploying a high-availability Kubernetes cluster with containerd and HAProxy.</p>
-  </header>
+{% extends 'base.html' %}
 
-  <section>
+{% block title %}Setting Up Kubernetes | Cluster Setup Guide{% endblock %}
+{% block description %}Complete guide to deploying a high-availability Kubernetes cluster on bare metal with containerd and HAProxy{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-cube"></i> Setting Up Kubernetes</h1>
+<p>A detailed guide to deploying a high-availability Kubernetes cluster with containerd and HAProxy</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
     <details>
       <summary>Cluster Configuration and Components</summary>
       <p>We will set up an 8-node Kubernetes cluster with the following components:</p>
@@ -169,10 +122,5 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
       <p>Check pods:</p>
       <pre><code>kubectl get pods --all-namespaces</code></pre>
     </details>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 Ashish's Kubernetes Guide</p>
-  </footer>
-</body>
-</html>
+</section>
+{% endblock %}
