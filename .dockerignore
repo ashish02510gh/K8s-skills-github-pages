@@ -1,0 +1,13 @@
+.venv
+venv
+test_env
+__pycache__
+.git
+.gitignore
+*.pyc
+*.pyo
+*.pyd
+*.swp
+.DS_Store
+node_modules
+.env

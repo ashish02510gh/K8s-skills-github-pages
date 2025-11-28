@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    image: k8s-skills-web:latest
+    container_name: k8s_skills_web
+    restart: unless-stopped
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-changeme}
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # Uncomment volume for local development
+    # volumes:
+    #   - ./:/app
+
+# Use a reverse proxy / load balancer in front of this service for production
+# (nginx, Traefik, Azure App Gateway, etc.)
