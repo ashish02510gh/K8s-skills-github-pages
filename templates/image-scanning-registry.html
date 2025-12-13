@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}Image Scanning & Registry | Kubernetes Security{% endblock %}
+{% block description %}Container image vulnerability scanning, registry security, image signing, and supply chain security.{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-search"></i> Image Scanning & Registry</h1>
+<p>Securing Container Images and Registries</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h2><i class="fas fa-shield-alt"></i> Container Image Security</h2>
+    <p>
+        Container images are the foundation of your applications. Vulnerable images can introduce security risks into your cluster. 
+        Image scanning identifies vulnerabilities before they reach production.
+    </p>
+    <div class="warning-box">
+        <strong>⚠️ Important:</strong> Scan images before deployment and continuously scan running images for new vulnerabilities.
+    </div>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-magnifying-glass"></i> Image Scanning Tools</h2>
+    
+    <h3>Trivy</h3>
+    <p>Fast, comprehensive vulnerability scanner:</p>
+    <pre><code># Scan local image
+trivy image myimage:latest
+
+# Scan with detailed output
+trivy image --severity HIGH,CRITICAL myimage:latest
+
+# Generate report
+trivy image --format json myimage:latest > report.json</code></pre>
+    
+    <h3>Grype</h3>
+    <p>Syft-based vulnerability scanner:</p>
+    <pre><code>grype myimage:latest
+grype myimage:latest -o json > report.json</code></pre>
+    
+    <h3>Clair</h3>
+    <p>Container image vulnerability detection:</p>
+    <ul>
+        <li>Analyzes image layers</li>
+        <li>Compares against vulnerability databases</li>
+        <li>REST API for integration</li>
+    </ul>
+    
+    <h3>Harbor</h3>
+    <p>Enterprise container registry with scanning:</p>
+    <ul>
+        <li>Built-in Trivy scanning</li>
+        <li>Image signing and verification</li>
+        <li>Access control and RBAC</li>
+        <li>Replication and security policies</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-lock"></i> Registry Security</h2>
+    
+    <h3>Use Private Registries</h3>
+    <ul>
+        <li>Never pull from public registries in production</li>
+        <li>Use private Docker Hub, Quay, ECR, ACR, GCR</li>
+        <li>Implement access control</li>
+        <li>Enable audit logging</li>
+    </ul>
+    
+    <h3>Registry Authentication</h3>
+    <pre><code>apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-credentials
+type: kubernetes.io/dockercfg
+data:
+  .dockercfg: |
+    {
+      "registry.example.com": {
+        "username": "user",
+        "password": "password"
+      }
+    }</code></pre>
+    
+    <h3>Pod Registry Credentials</h3>
+    <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+spec:
+  imagePullSecrets:
+  - name: registry-credentials
+  containers:
+  - name: app
+    image: registry.example.com/myapp:latest</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-pen-fancy"></i> Image Signing</h2>
+    
+    <h3>Notary - Image Signing</h3>
+    <p>Sign and verify container images:</p>
+    <pre><code># Sign image
+notary key generate delegation
+notary delegation add registry.example.com/myapp targets/releases user_key.pub
+notary publish registry.example.com/myapp</code></pre>
+    
+    <h3>Cosign - Sigstore</h3>
+    <p>Container image signing and verification:</p>
+    <pre><code># Sign image
+cosign sign --key cosign.key registry.example.com/myapp:latest
+
+# Verify signature
+cosign verify --key cosign.pub registry.example.com/myapp:latest
+
+# Keyless signing (OpenID Connect)
+cosign sign --oidc-provider=https://oauth.google.com registry.example.com/myapp:latest</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check"></i> Admission Controllers</h2>
+    
+    <h3>ImagePolicyWebhook</h3>
+    <p>Restrict which images can be deployed:</p>
+    <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+spec:
+  containers:
+  - name: app
+    image: registry.example.com/approved/myapp:v1.0  # Must match policy</code></pre>
+    
+    <h3>Enforcement Rules</h3>
+    <ul>
+        <li>Only approved registries allowed</li>
+        <li>Require image signatures</li>
+        <li>Block unsigned images</li>
+        <li>Require image tags (no latest)</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-code"></i> CI/CD Integration</h2>
+    
+    <h3>GitHub Actions Example</h3>
+    <pre><code>name: Scan and Push
+on: [push]
+jobs:
+  scan-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build image
+      run: docker build -t myapp:$GITHUB_SHA .
+    - name: Scan with Trivy
+      run: trivy image myapp:$GITHUB_SHA
+    - name: Push to registry
+      run: docker push registry.example.com/myapp:$GITHUB_SHA</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check-circle"></i> Best Practices</h2>
+    <div class="success-box">
+        <ul>
+            <li>✓ Scan all images before pushing to registry</li>
+            <li>✓ Scan running images continuously</li>
+            <li>✓ Use minimal base images (Alpine, Distroless)</li>
+            <li>✓ Keep base images updated</li>
+            <li>✓ Use private registries only</li>
+            <li>✓ Implement registry access control</li>
+            <li>✓ Sign all images cryptographically</li>
+            <li>✓ Enforce signature verification</li>
+            <li>✓ Block deployment of unsigned images</li>
+            <li>✓ Require specific image tags (no latest)</li>
+            <li>✓ Integrate scanning into CI/CD</li>
+            <li>✓ Regular base image updates</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

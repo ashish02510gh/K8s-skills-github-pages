@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Supply Chain Security | Kubernetes Security{% endblock %}
+{% block description %}End-to-end supply chain protection, image provenance, artifact signing, and secure deployment pipelines.{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-link"></i> Supply Chain Security</h1>
+<p>Securing Your CI/CD Pipeline and Artifacts</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h2><i class="fas fa-shield-alt"></i> Supply Chain Overview</h2>
+    <p>
+        Supply chain security covers the entire journey from source code to production. Vulnerabilities can be introduced at any stage: 
+        during development, build, scanning, signing, registry, or deployment. A comprehensive approach protects against all attack vectors.
+    </p>
+    <div class="danger-box">
+        <strong>🔴 Critical:</strong> Supply chain attacks are increasing. Recent major breaches involved compromised dependencies and tools.
+    </div>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-code-branch"></i> Secure Development</h2>
+    
+    <h3>Source Code Security</h3>
+    <ul>
+        <li>Use version control (Git) with enforced access control</li>
+        <li>Require code reviews before merge</li>
+        <li>Implement branch protection rules</li>
+        <li>Sign commits with GPG keys</li>
+        <li>Scan code for secrets</li>
+    </ul>
+    
+    <h3>Dependency Management</h3>
+    <pre><code># Scan dependencies for vulnerabilities
+npm audit
+pip-audit
+go list -json -m all | nancy sleuth
+cargo audit</code></pre>
+    
+    <h3>SBOM (Software Bill of Materials)</h3>
+    <p>Track all components and dependencies:</p>
+    <pre><code># Generate SBOM with Syft
+syft packages -o json docker:myimage:latest > sbom.json
+
+# Generate with CycloneDX format
+syft packages -o cyclonedx docker:myimage:latest > sbom.xml</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-wrench"></i> Secure Build Process</h2>
+    
+    <h3>CI/CD Pipeline Security</h3>
+    <ul>
+        <li>Run tests automatically on all PRs</li>
+        <li>Enforce security scanning in pipeline</li>
+        <li>Require approval before production deployment</li>
+        <li>Use signed commits and tags</li>
+        <li>Implement audit logging</li>
+    </ul>
+    
+    <h3>Build Isolation</h3>
+    <ul>
+        <li>Use separate build environments</li>
+        <li>Clean build environment between builds</li>
+        <li>Restrict network access during build</li>
+        <li>Run builds as non-root</li>
+    </ul>
+    
+    <h3>Build Configuration</h3>
+    <pre><code># Use minimal base images
+FROM alpine:latest as build
+# Build application
+FROM distroless/base:nonroot
+COPY --from=build /app /app
+USER nonroot</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check"></i> Artifact Verification</h2>
+    
+    <h3>Sigstore - Keyless Signing</h3>
+    <p>Sign artifacts using OpenID Connect:</p>
+    <pre><code># Sign container image
+cosign sign registry.example.com/myapp:v1.0
+
+# Verify signature
+cosign verify registry.example.com/myapp:v1.0
+
+# Sign with custom key
+cosign sign --key cosign.key registry.example.com/myapp:v1.0</code></pre>
+    
+    <h3>Provenance Attestation</h3>
+    <pre><code># Create provenance statement
+cosign attest --predicate provenance.json registry.example.com/myapp:v1.0
+
+# Verify provenance
+cosign verify-attestation registry.example.com/myapp:v1.0</code></pre>
+    
+    <h3>SLSA Framework</h3>
+    <ul>
+        <li>Supply-chain Levels for Software Artifacts</li>
+        <li>Defines security levels 0-3</li>
+        <li>Provides framework for secure builds</li>
+        <li>Requires provenance and attestation</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-deployment"></i> Secure Deployment</h2>
+    
+    <h3>Binary Authorization</h3>
+    <p>Only deploy signed images:</p>
+    <pre><code>apiVersion: binaryauthorization.grafeas.io/v1beta1
+kind: Policy
+metadata:
+  name: require-signed
+spec:
+  admissionWhitelistPatterns:
+  - namePattern: gcr.io/myproject/*
+  defaultAdmissionRule:
+    requireAttestationsBy:
+    - projects/myproject/attestors/prod-attestor
+    evaluationMode: REQUIRE_ATTESTATION</code></pre>
+    
+    <h3>Policy-as-Code</h3>
+    <ul>
+        <li>Define deployment policies as code</li>
+        <li>Use Open Policy Agent (OPA/Gatekeeper)</li>
+        <li>Enforce policies through admission controllers</li>
+        <li>Version control policies</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-lock"></i> End-to-End Security</h2>
+    
+    <h3>Complete Pipeline</h3>
+    <pre><code>Source Code
+    ↓ (Scan secrets, lint)
+Build Environment
+    ↓ (Compile, test)
+Image Creation
+    ↓ (Sign, SBOM)
+Registry
+    ↓ (Scan, verify signature)
+Kubernetes Cluster
+    ↓ (Admission control, PSS)
+Running Container
+    ↓ (Runtime monitoring)</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check-circle"></i> Best Practices</h2>
+    <div class="success-box">
+        <ul>
+            <li>✓ Implement secure source code practices</li>
+            <li>✓ Scan dependencies and code regularly</li>
+            <li>✓ Generate and maintain SBOM</li>
+            <li>✓ Sign all artifacts cryptographically</li>
+            <li>✓ Verify signatures before deployment</li>
+            <li>✓ Use minimal base images</li>
+            <li>✓ Scan images in CI/CD pipeline</li>
+            <li>✓ Implement policy-as-code</li>
+            <li>✓ Require approval for production changes</li>
+            <li>✓ Audit all pipeline activities</li>
+            <li>✓ Regularly update dependencies</li>
+            <li>✓ Implement runtime security monitoring</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

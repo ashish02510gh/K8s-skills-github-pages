@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}Audit Logging & Monitoring | Kubernetes Security{% endblock %}
+{% block description %}Kubernetes audit logs, event tracking, security monitoring, threat detection, and forensics analysis.{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-clipboard-list"></i> Audit Logging & Monitoring</h1>
+<p>Track and Monitor All Cluster Activities</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h2><i class="fas fa-shield-alt"></i> Audit Logging Overview</h2>
+    <p>
+        Kubernetes audit logs record all API requests made to the cluster. Enabling audit logging is essential for security, 
+        compliance, and troubleshooting. Audit logs help detect unauthorized access attempts, security breaches, and 
+        policy violations.
+    </p>
+    <div class="info-box">
+        <strong>💡 Key Benefit:</strong> Audit logs provide forensic evidence of what happened in your cluster and who did it.
+    </div>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-list"></i> Audit Log Levels</h2>
+    
+    <h3>None</h3>
+    <p>Don't log the request (usually for healthchecks and probes)</p>
+    
+    <h3>Metadata</h3>
+    <p>Log request metadata but not request/response body:</p>
+    <ul>
+        <li>User, timestamp, verb, resource</li>
+        <li>Minimal overhead</li>
+        <li>Good for detecting patterns</li>
+    </ul>
+    
+    <h3>Request</h3>
+    <p>Log metadata and request body:</p>
+    <ul>
+        <li>Useful for seeing what was requested</li>
+        <li>More storage/performance overhead</li>
+    </ul>
+    
+    <h3>RequestResponse</h3>
+    <p>Log metadata, request body, and response:</p>
+    <ul>
+        <li>Complete record of what happened</li>
+        <li>Highest storage/performance cost</li>
+        <li>Essential for sensitive resources (secrets)</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-cogs"></i> Enabling Audit Logging</h2>
+    
+    <h3>API Server Configuration</h3>
+    <pre><code>--audit-log-path=/var/log/kubernetes/audit.log
+--audit-log-maxage=30
+--audit-log-maxbackup=10
+--audit-log-maxsize=100
+--audit-policy-file=/etc/kubernetes/audit-policy.yaml</code></pre>
+    
+    <h3>Audit Policy File</h3>
+    <pre><code>apiVersion: audit.k8s.io/v1
+kind: Policy
+# Log secrets at request/response level
+- level: RequestResponse
+  resources: ["secrets"]
+  omitStages:
+  - RequestReceived
+
+# Log pod exec at request level
+- level: Request
+  verbs: ["exec"]
+  resources: ["pods/exec"]
+
+# Log namespace changes
+- level: RequestResponse
+  verbs: ["create", "delete", "patch"]
+  resources: ["namespaces"]
+
+# Log RBAC changes
+- level: RequestResponse
+  resources: ["rolebindings", "clusterrolebindings"]
+
+# Default: log metadata
+- level: Metadata
+  omitStages:
+  - RequestReceived</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-eye"></i> Runtime Security Monitoring</h2>
+    
+    <h3>Falco - Runtime Security</h3>
+    <p>Use Falco to detect suspicious runtime behavior:</p>
+    <ul>
+        <li>Monitor system calls</li>
+        <li>Detect privilege escalation</li>
+        <li>Identify unauthorized file access</li>
+        <li>Catch container escapes</li>
+    </ul>
+    
+    <h3>Sysdig - System Monitoring</h3>
+    <ul>
+        <li>Real-time container monitoring</li>
+        <li>Network traffic inspection</li>
+        <li>Resource usage tracking</li>
+        <li>Forensic analysis</li>
+    </ul>
+    
+    <h3>Prometheus & Grafana</h3>
+    <ul>
+        <li>Collect cluster metrics</li>
+        <li>Monitor API server performance</li>
+        <li>Track resource usage</li>
+        <li>Create dashboards</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-exclamation-triangle"></i> What to Monitor</h2>
+    
+    <h3>Critical Events</h3>
+    <ul>
+        <li>RBAC permission changes</li>
+        <li>Secret access and creation</li>
+        <li>Pod exec and port-forward</li>
+        <li>Privileged container creation</li>
+        <li>Network policy modifications</li>
+        <li>Node cordoning/draining</li>
+    </ul>
+    
+    <h3>Suspicious Patterns</h3>
+    <ul>
+        <li>Failed authentication attempts</li>
+        <li>Unauthorized access attempts</li>
+        <li>Unusual API patterns</li>
+        <li>High volume requests</li>
+        <li>Out-of-hours access</li>
+        <li>Unusual resource modifications</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-code"></i> Example: Secret Access Alert</h2>
+    <pre><code># Alert on secret access
+- alert: SecretAccess
+  expr: audit_event_count{resource="secrets"} > 5
+  for: 5m
+  annotations:
+    summary: "High number of secret accesses detected"
+    description: "{{ $value }} secret accesses in 5 minutes"</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check-circle"></i> Best Practices</h2>
+    <div class="success-box">
+        <ul>
+            <li>✓ Enable audit logging on all clusters</li>
+            <li>✓ Set RequestResponse level for sensitive resources</li>
+            <li>✓ Implement log forwarding to secure location</li>
+            <li>✓ Set appropriate log retention (30+ days)</li>
+            <li>✓ Protect audit logs from tampering</li>
+            <li>✓ Deploy runtime monitoring (Falco)</li>
+            <li>✓ Set up alerting for suspicious activities</li>
+            <li>✓ Review logs regularly for anomalies</li>
+            <li>✓ Archive logs for long-term retention</li>
+            <li>✓ Conduct regular forensic analysis</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

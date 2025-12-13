@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Server Hardening | Kubernetes Security</title>
+    <meta name="description" content="Securing the Kubernetes API server: authentication, authorization, admission controllers, and audit logging">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root { --primary: #1e40af; --primary-light: #3b82f6; --accent: #06b6d4; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --bg-light: #f8fafc; --bg-card: #ffffff; --text-dark: #0f172a; --text-gray: #64748b; --border: #e2e8f0; --shadow: 0 4px 6px -1px rgba(0,0,0,0.1); --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%); color: var(--text-dark); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white; padding: 3rem 2rem; text-align: center; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; }
+        header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,96C1248,75,1344,53,1392,42.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom; background-size: cover; opacity: 0.3; }
+        header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; position: relative; z-index: 1; }
+        header p { font-size: 1.125rem; opacity: 0.95; position: relative; z-index: 1; }
+        main { flex: 1; max-width: 1000px; width: 100%; margin: 0 auto; padding: 3rem 2rem; }
+        .intro-section { background: var(--bg-card); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 2rem; }
+        .intro-section h2 { font-size: 1.875rem; color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+        .intro-section h3 { font-size: 1.375rem; color: var(--primary); margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .intro-section p { color: var(--text-gray); font-size: 1rem; line-height: 1.75; margin-bottom: 1rem; }
+        .intro-section ul { color: var(--text-gray); margin-left: 2rem; margin-bottom: 1rem; }
+        .intro-section li { margin-bottom: 0.5rem; line-height: 1.75; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; border-left: 4px solid var(--accent); }
+        .info-box { background: #dbeafe; border-left: 4px solid var(--primary); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+        table th { background: var(--primary); color: white; padding: 1rem; text-align: left; font-weight: 600; }
+        table td { padding: 1rem; border-bottom: 1px solid var(--border); }
+        footer { background: var(--text-dark); color: white; padding: 2rem; text-align: center; margin-top: auto; }
+        footer a { color: var(--accent); text-decoration: none; }
+        @media (max-width: 768px) { header h1 { font-size: 2rem; } main { padding: 2rem 1rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-server"></i> API Server Hardening</h1>
+        <p>Securing the Kubernetes API Server and Control Plane</p>
+    </header>
+
+    <main>
+        <section class="intro-section">
+            <h2><i class="fas fa-shield-alt"></i> API Server Security Overview</h2>
+            <p>
+                The Kubernetes API server is the central hub for cluster management. It's the gateway through which all 
+                cluster operations flow. Securing the API server is paramount as compromised API access means full cluster control.
+            </p>
+            <div class="info-box">
+                <strong>💡 Key Insight:</strong> The API server handles three critical security functions: 
+                Authentication (who you are), Authorization (what you can do), and Admission Control (additional policy enforcement).
+            </div>
+        </section>
+
+        <section class="intro-section">
+            <h2><i class="fas fa-lock"></i> Authentication Methods</h2>
+
+            <h3>Client Certificate Authentication</h3>
+            <p>Default method for inter-component communication:</p>
+            <ul>
+                <li>X.509 client certificates</li>
+                <li>Used by kubelets, controllers, schedulers</li>
+                <li>Requires valid certificate in CN/SAN</li>
+            </ul>
+
+            <h3>Bearer Token Authentication</h3>
+            <p>Authentication using service account tokens:</p>
+            <ul>
+                <li>Service account tokens mounted in pods</li>
+                <li>Default authentication for applications</li>
+                <li>Tokens stored in secrets</li>
+            </ul>
+
+            <h3>External Authentication</h3>
+            <ul>
+                <li>LDAP/Active Directory</li>
+                <li>OIDC (OpenID Connect)</li>
+                <li>Webhook token authentication</li>
+                <li>OAuth2 proxy</li>
+            </ul>
+
+            <h3>Configuring OIDC</h3>
+            <div class="code-block">
+--oidc-issuer-url=https://accounts.google.com
+--oidc-client-id=kubernetes.example.com
+--oidc-username-claim=email
+--oidc-groups-claim=groups
+            </div>
+        </section>
+
+        <section class="intro-section">
+            <h2><i class="fas fa-gavel"></i> Authorization (RBAC)</h2>
+
+            <h3>RBAC Components</h3>
+            <ul>
+                <li><strong>Role:</strong> Namespace-scoped permissions</li>
+                <li><strong>ClusterRole:</strong> Cluster-wide permissions</li>
+                <li><strong>RoleBinding:</strong> Assigns roles to users/groups in namespace</li>
+                <li><strong>ClusterRoleBinding:</strong> Assigns cluster roles cluster-wide</li>
+            </ul>
+
+            <h3>RBAC Best Practices</h3>
+            <ul>
+                <li>Implement least privilege principle</li>
+                <li>Use namespace isolation</li>
+                <li>Avoid wildcard permissions (*)</li>
+                <li>Regular RBAC audits</li>
+            </ul>
+
+            <div class="code-block">
+# Check user permissions
+kubectl auth can-i create deployments --as=user@example.com -n production
+
+# Examine RBAC rules
+kubectl get rolebindings -A
+kubectl get clusterrolebindings
+            </div>
+        </section>
+
+        <section class="intro-section">
+            <h2><i class="fas fa-filter"></i> Admission Controllers</h2>
+
+            <h3>Built-in Admission Controllers</h3>
+            <table>
+                <tr>
+                    <th>Controller</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td><strong>PodSecurityPolicy</strong></td>
+                    <td>Enforces pod security policies (deprecated, use PSS)</td>
+                </tr>
+                <tr>
+                    <td><strong>ResourceQuota</strong></td>
+                    <td>Enforces resource limits per namespace</td>
+                </tr>
+                <tr>
+                    <td><strong>LimitRanger</strong></td>
+                    <td>Enforces resource limits per pod/container</td>
+                </tr>
+                <tr>
+                    <td><strong>ValidatingAdmissionWebhook</strong></td>
+                    <td>Custom validation via webhooks</td>
+                </tr>
+                <tr>
+                    <td><strong>MutatingAdmissionWebhook</strong></td>
+                    <td>Custom mutations via webhooks</td>
+                </tr>
+            </table>
+
+            <h3>Enable Essential Admission Controllers</h3>
+            <div class="code-block">
+--enable-admission-plugins=PodSecurityPolicy,ResourceQuota,LimitRanger,ValidatingAdmissionWebhook,MutatingAdmissionWebhook
+            </div>
+        </section>
+
+        <section class="intro-section">
+            <h2><i class="fas fa-clipboard-list"></i> Audit Logging</h2>
+
+            <h3>Enable Audit Logging</h3>
+            <div class="code-block">
+--audit-log-path=/var/log/kubernetes/audit.log
+--audit-log-maxage=30
+--audit-log-maxsize=100
+--audit-policy-file=/etc/kubernetes/audit-policy.yaml
+            </div>
+
+            <h3>Audit Policy Example</h3>
+            <div class="code-block">
+apiVersion: audit.k8s.io/v1
+kind: Policy
+rules:
+- level: RequestResponse
+  resources: ["secrets"]
+- level: Metadata
+  omitStages:
+  - RequestReceived
+- level: None
+  users: ["system:kube-probe"]
+            </div>
+        </section>
+
+        <section class="intro-section">
+            <h2><i class="fas fa-check-circle"></i> API Server Security Checklist</h2>
+            <ul>
+                <li>✓ Enable RBAC (not ABAC)</li>
+                <li>✓ Disable anonymous authentication</li>
+                <li>✓ Configure audit logging</li>
+                <li>✓ Enforce admission policies</li>
+                <li>✓ Use TLS for API server</li>
+                <li>✓ Restrict API server access</li>
+                <li>✓ Keep API server updated</li>
+                <li>✓ Monitor API server logs</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p><i class="fas fa-heart"></i> Built with passion for the Cloud-Native community</p>
+        <p>&copy; 2025 Kubernetes Insights</p>
+    </footer>
+</body>
+</html>

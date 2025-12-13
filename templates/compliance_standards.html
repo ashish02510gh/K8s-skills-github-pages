@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %}Compliance & Standards | Kubernetes Security{% endblock %}
+{% block description %}CIS benchmarks, PCI-DSS, HIPAA, SOC 2 compliance, regulatory requirements, and compliance validation.{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-balance-scale"></i> Compliance & Standards</h1>
+<p>Meeting Industry Security & Compliance Requirements</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h2><i class="fas fa-shield-alt"></i> Compliance Overview</h2>
+    <p>
+        Kubernetes deployments must comply with industry standards and regulations. Common requirements include CIS Benchmarks, 
+        PCI-DSS for payment processing, HIPAA for healthcare, SOC 2 for service providers, and GDPR for data protection.
+    </p>
+    <div class="info-box">
+        <strong>💡 Key Insight:</strong> Compliance is not a one-time effort. It requires continuous monitoring, testing, and remediation.
+    </div>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-list"></i> Major Compliance Standards</h2>
+    
+    <h3>CIS Kubernetes Benchmark</h3>
+    <p>Industry best practices for Kubernetes security:</p>
+    <ul>
+        <li><strong>Level 1:</strong> Basic hardening (everyone should do this)</li>
+        <li><strong>Level 2:</strong> Advanced hardening (security-sensitive workloads)</li>
+        <li>Controls: 200+ security checks</li>
+        <li>Tools: kube-bench for automated auditing</li>
+    </ul>
+    
+    <h3>PCI-DSS (Payment Card Industry)</h3>
+    <p>For systems processing payment cards:</p>
+    <ul>
+        <li>Network segmentation</li>
+        <li>Access control and authentication</li>
+        <li>Encryption in transit and at rest</li>
+        <li>Regular security testing and monitoring</li>
+        <li>Incident response procedures</li>
+    </ul>
+    
+    <h3>HIPAA (Healthcare)</h3>
+    <p>For healthcare data:</p>
+    <ul>
+        <li>Data encryption requirements</li>
+        <li>Access control and audit logging</li>
+        <li>Business associate agreements</li>
+        <li>Breach notification procedures</li>
+        <li>Regular risk assessments</li>
+    </ul>
+    
+    <h3>SOC 2 (Service Organizations)</h3>
+    <p>For service providers:</p>
+    <ul>
+        <li>Security, availability, processing integrity</li>
+        <li>Confidentiality and privacy controls</li>
+        <li>Regular independent audits</li>
+        <li>Documentation and evidence</li>
+    </ul>
+    
+    <h3>GDPR (Data Protection)</h3>
+    <p>For processing EU resident data:</p>
+    <ul>
+        <li>Data protection by design</li>
+        <li>User consent and privacy</li>
+        <li>Right to access and erasure</li>
+        <li>Data breach notification</li>
+        <li>Data processing agreements</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-tools"></i> Compliance Tools</h2>
+    
+    <h3>kube-bench</h3>
+    <p>Automated CIS Benchmark auditing:</p>
+    <pre><code>kube-bench run --targets node,policies
+
+# Check specific control
+kube-bench run --targets node --checks 4.1.1
+
+# Generate JSON report
+kube-bench run --json > report.json</code></pre>
+    
+    <h3>kubesec</h3>
+    <p>Security risk analysis for Kubernetes:</p>
+    <pre><code>kubesec scan deployment.yaml
+kubesec scan --severity 7 deployment.yaml</code></pre>
+    
+    <h3>Polaris</h3>
+    <p>Best practices audit for Kubernetes:</p>
+    <pre><code>polaris audit --audit-path ./audit.json
+polaris dashboard</code></pre>
+    
+    <h3>Kubescape</h3>
+    <p>Comprehensive security auditing:</p>
+    <pre><code>kubescape scan
+kubescape scan --compliance cis
+kubescape scan --severity high</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check-list"></i> Compliance Checklist</h2>
+    
+    <h3>Essential Controls</h3>
+    <ul>
+        <li>✓ RBAC enabled and properly configured</li>
+        <li>✓ Network policies implemented</li>
+        <li>✓ Pod Security Standards enforced</li>
+        <li>✓ Secrets encrypted at rest</li>
+        <li>✓ Audit logging enabled</li>
+        <li>✓ Image scanning implemented</li>
+        <li>✓ TLS for all communications</li>
+        <li>✓ Resource quotas configured</li>
+    </ul>
+    
+    <h3>Hardening Controls</h3>
+    <ul>
+        <li>○ Admission webhooks configured</li>
+        <li>○ Runtime security monitoring</li>
+        <li>○ Network segmentation</li>
+        <li>○ Multi-factor authentication</li>
+        <li>○ Backup and disaster recovery</li>
+        <li>○ Incident response procedures</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-chart-pie"></i> Continuous Compliance</h2>
+    
+    <h3>Regular Scanning</h3>
+    <ul>
+        <li>Daily compliance scans using automated tools</li>
+        <li>Weekly vulnerability assessments</li>
+        <li>Monthly penetration testing</li>
+        <li>Quarterly risk assessments</li>
+        <li>Annual independent audits</li>
+    </ul>
+    
+    <h3>Documentation</h3>
+    <ul>
+        <li>Maintain detailed compliance evidence</li>
+        <li>Document all security controls</li>
+        <li>Record audit findings and remediation</li>
+        <li>Keep incident logs and reports</li>
+        <li>Store policy versions and updates</li>
+    </ul>
+    
+    <h3>Remediation</h3>
+    <ul>
+        <li>Create remediation plans for findings</li>
+        <li>Track remediation progress</li>
+        <li>Re-test after remediation</li>
+        <li>Document completion</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check-circle"></i> Best Practices</h2>
+    <div class="success-box">
+        <ul>
+            <li>✓ Know your applicable compliance standards</li>
+            <li>✓ Implement compliance by design</li>
+            <li>✓ Automate compliance scanning</li>
+            <li>✓ Maintain comprehensive documentation</li>
+            <li>✓ Regular testing and validation</li>
+            <li>✓ Incident response procedures</li>
+            <li>✓ Employee training and awareness</li>
+            <li>✓ Third-party audits and assessments</li>
+            <li>✓ Continuous improvement</li>
+            <li>✓ Stay updated with standards changes</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

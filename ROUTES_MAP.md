@@ -16,7 +16,16 @@ Complete documentation of all application routes and their corresponding templat
 | `/comparision_terms` | GET | `comparision_terms.html` | Cloud Terminology Comparison | Equivalent terminology across Azure, AWS, GCP, and open-source |
 | `/cncfscope` | GET | `CNCFTools.html` | CNCF Landscape | Cloud Native Computing Foundation tools and services overview |
 | `/cncftoolscomparision` | GET | `cncftoolscomparision.html` | CNCF Tools Comparison | Detailed comparison of CNCF solutions with cloud provider services |
-| `/microk8schallenges` | GET | `microk8schallenges.html` | Microservices Architecture Challenges | Common challenges and solutions in microservices environments |
+| `/pod-security` | GET | `pod_security.html` | Pod Security Standards | Security contexts, privilege restrictions, and policy enforcement |
+| `/k8s-security-index` | GET | `k8s_security_index.html` | Kubernetes Security | Comprehensive security index and best practices |
+| `/network-policies` | GET | `network_policies.html` | Network Policies | Pod isolation and zero-trust networking |
+| `/secrets-management` | GET | `secrets_management.html` | Secrets Management | Encryption, rotation, and credential management |
+| `/certificate-management` | GET | `certificate_management.html` | Certificate Management | TLS/SSL certificates and automated renewal |
+| `/etcd-security` | GET | `etcd_security.html` | etcd Security | Database protection and backup |
+| `/audit-logging` | GET | `audit_logging_monitoring.html` | Audit Logging | Event tracking, monitoring, and forensics |
+| `/image-scanning` | GET | `image-scanning-registry.html` | Image Scanning | Vulnerability scanning and registry security |
+| `/supply-chain-security` | GET | `supply_chain_security.html` | Supply Chain Security | CI/CD security and artifact signing |
+| `/compliance` | GET | `compliance_standards.html` | Compliance & Standards | CIS, PCI-DSS, HIPAA, SOC 2 compliance |
 
 ## Error Routes
 

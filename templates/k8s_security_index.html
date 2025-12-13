@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Kubernetes Security Index | Comprehensive Security Guide{% endblock %}
+{% block description %}Complete index of Kubernetes security topics: authentication, authorization, secrets, compliance, and best practices.{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-shield-alt"></i> Kubernetes Security</h1>
+<p>Comprehensive Guide to Cloud-Native Security Best Practices</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h2><i class="fas fa-exclamation-triangle"></i> Why Kubernetes Security Matters</h2>
+    <p>
+        Kubernetes security is multi-layered and complex. From securing the control plane to protecting workloads, 
+        certificates, secrets, and network traffic—every layer requires careful attention. A single misconfiguration 
+        can expose your entire cluster to threats.
+    </p>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-lock"></i> Key Security Areas</h2>
+    
+    <h3>1. Authentication & Authorization (RBAC)</h3>
+    <ul>
+        <li><strong>RBAC:</strong> Role-Based Access Control</li>
+        <li><strong>Service Accounts:</strong> Pod authentication</li>
+        <li><strong>OIDC:</strong> OpenID Connect integration</li>
+        <li><strong>Webhook:</strong> Custom authentication</li>
+    </ul>
+    
+    <h3>2. Network Security</h3>
+    <ul>
+        <li>Network Policies for pod isolation</li>
+        <li>Service mesh for advanced traffic control</li>
+        <li>Ingress security policies</li>
+        <li>Zero-trust networking approach</li>
+    </ul>
+    
+    <h3>3. Secrets & Data Protection</h3>
+    <ul>
+        <li>Encryption at rest for etcd</li>
+        <li>Secret rotation strategies</li>
+        <li>External secret stores (Vault, AWS Secrets Manager)</li>
+        <li>Certificate management</li>
+    </ul>
+    
+    <h3>4. Pod & Container Security</h3>
+    <ul>
+        <li>Pod Security Standards (PSS)</li>
+        <li>Security contexts</li>
+        <li>Image scanning for vulnerabilities</li>
+        <li>Runtime security monitoring</li>
+    </ul>
+    
+    <h3>5. API Server Security</h3>
+    <ul>
+        <li>Authentication mechanisms</li>
+        <li>Admission controllers</li>
+        <li>Audit logging</li>
+        <li>TLS encryption</li>
+    </ul>
+    
+    <h3>6. Cluster Infrastructure</h3>
+    <ul>
+        <li>etcd encryption and backup</li>
+        <li>Node security hardening</li>
+        <li>kubelet configuration</li>
+        <li>Control plane protection</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check-circle"></i> Security Best Practices Checklist</h2>
+    <div class="success-box">
+        <h3>Critical Controls (Must Have)</h3>
+        <ul>
+            <li>✓ Enable RBAC</li>
+            <li>✓ Encrypt secrets at rest</li>
+            <li>✓ Implement network policies</li>
+            <li>✓ Use pod security standards</li>
+            <li>✓ Enable audit logging</li>
+            <li>✓ Scan container images</li>
+        </ul>
+    </div>
+    
+    <div class="warning-box">
+        <h3>Important Hardening (Should Have)</h3>
+        <ul>
+            <li>○ Configure admission webhooks</li>
+            <li>○ Implement resource quotas</li>
+            <li>○ Set pod resource limits</li>
+            <li>○ Use private registries</li>
+            <li>○ Enable runtime security monitoring</li>
+        </ul>
+    </div>
+    
+    <div class="info-box">
+        <h3>Defense in Depth (Nice to Have)</h3>
+        <ul>
+            <li>◇ Implement service mesh (Istio/Linkerd)</li>
+            <li>◇ Use Harbor for registry scanning</li>
+            <li>◇ Deploy Falco for runtime security</li>
+            <li>◇ Implement cert rotation automation</li>
+            <li>◇ Use external secret stores</li>
+        </ul>
+    </div>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-graduation-cap"></i> Learning Resources</h2>
+    <ul>
+        <li><a href="/api-server-security">API Server Hardening</a></li>
+        <li><a href="/pod-security">Pod Security Standards</a></li>
+        <li><a href="/security-hub">Security Hub (All Topics)</a></li>
+        <li><a href="/">Back to Home</a></li>
+    </ul>
+</section>
+{% endblock %}

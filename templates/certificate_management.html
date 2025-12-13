@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}Certificate Management | Kubernetes Security{% endblock %}
+{% block description %}TLS/SSL certificates, certificate signing requests, automated certificate management, and PKI setup.{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-certificate"></i> Certificate Management</h1>
+<p>Secure Communication with TLS/SSL Certificates</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h2><i class="fas fa-shield-alt"></i> Certificates in Kubernetes</h2>
+    <p>
+        Kubernetes uses certificates for secure communication between components. The cluster generates certificates during initialization 
+        and uses them for API server, etcd, kubelet, and other components. Understanding certificate management is crucial for cluster 
+        security and preventing outages.
+    </p>
+    <div class="info-box">
+        <strong>💡 Key Point:</strong> Kubernetes certificates typically expire after 1 year. Plan for certificate rotation before expiration.
+    </div>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-lock"></i> Certificate Types</h2>
+    
+    <h3>1. API Server Certificates</h3>
+    <p>Used by the Kubernetes API server:</p>
+    <ul>
+        <li>apiserver.crt / apiserver.key</li>
+        <li>Signed by cluster CA</li>
+        <li>Must include all API server addresses (IPs, hostnames)</li>
+    </ul>
+    
+    <h3>2. Kubelet Certificates</h3>
+    <p>Used by kubelets on worker nodes:</p>
+    <ul>
+        <li>kubelet.crt / kubelet.key</li>
+        <li>Each node has unique certificate</li>
+        <li>For client and server authentication</li>
+    </ul>
+    
+    <h3>3. etcd Certificates</h3>
+    <p>Protect cluster data store:</p>
+    <ul>
+        <li>etcd-server.crt / etcd-server.key</li>
+        <li>etcd-peer.crt / etcd-peer.key</li>
+        <li>Encrypt peer communication</li>
+    </ul>
+    
+    <h3>4. Cluster CA Certificate</h3>
+    <p>Root certificate signing authority:</p>
+    <ul>
+        <li>ca.crt / ca.key</li>
+        <li>Signs all other cluster certificates</li>
+        <li>Trusted by all components</li>
+    </ul>
+    
+    <h3>5. Service Account Tokens</h3>
+    <p>Certificates for pod authentication:</p>
+    <ul>
+        <li>Automatically issued and renewed</li>
+        <li>Stored in secret volumes</li>
+        <li>Used for API server authentication</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check"></i> Checking Certificate Status</h2>
+    
+    <h3>View Certificate Expiration</h3>
+    <pre><code># Check all cluster certificates
+kubeadm certs check-expiration
+
+# Check specific certificate
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -noout -dates
+
+# Check certificate details
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -noout -text</code></pre>
+    
+    <h3>Certificate Information</h3>
+    <ul>
+        <li><strong>Issuer:</strong> Signing authority (usually CA)</li>
+        <li><strong>Subject:</strong> Certificate owner</li>
+        <li><strong>Valid From/To:</strong> Expiration dates</li>
+        <li><strong>Subject Alternative Names (SANs):</strong> Additional identifiers (IPs, DNS names)</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-rotate"></i> Certificate Rotation</h2>
+    
+    <h3>Automatic Renewal (kubeadm)</h3>
+    <p>kubeadm automatically renews certificates on control plane nodes:</p>
+    <pre><code># Enable automatic certificate rotation
+# This happens during kubelet restart or cluster upgrade</code></pre>
+    
+    <h3>Manual Certificate Renewal</h3>
+    <pre><code># Renew all certificates
+kubeadm certs renew all
+
+# Renew specific certificate
+kubeadm certs renew apiserver
+
+# Verify renewal
+kubeadm certs check-expiration</code></pre>
+    
+    <h3>Manual Generation</h3>
+    <pre><code># Generate certificate signing request
+openssl req -new -key apiserver.key -out apiserver.csr \
+  -subj "/CN=kube-apiserver"
+
+# Sign with CA
+openssl x509 -req -in apiserver.csr \
+  -CA ca.crt -CAkey ca.key \
+  -out apiserver.crt -days 365 \
+  -extfile openssl.conf</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-code"></i> Custom Certificates</h2>
+    
+    <h3>Cert-Manager for Automatic Renewal</h3>
+    <p>Use cert-manager to automate certificate management:</p>
+    <pre><code>apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: my-cert
+  namespace: default
+spec:
+  secretName: my-cert-secret
+  duration: 2160h  # 90 days
+  renewBefore: 720h  # 30 days
+  commonName: example.com
+  dnsNames:
+  - example.com
+  - www.example.com
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer</code></pre>
+    
+    <h3>Let's Encrypt Integration</h3>
+    <ul>
+        <li>Automatic certificate provisioning</li>
+        <li>Free TLS certificates</li>
+        <li>Automatic renewal before expiration</li>
+        <li>Works with ingress controllers</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-warning"></i> Common Certificate Issues</h2>
+    
+    <h3>Expired Certificates</h3>
+    <ul>
+        <li><strong>Symptom:</strong> API server won't start, certificate verification errors</li>
+        <li><strong>Solution:</strong> Use kubeadm certs renew or replace expired certificates</li>
+        <li><strong>Prevention:</strong> Monitor expiration dates, set renewal reminders</li>
+    </ul>
+    
+    <h3>Wrong SAN (Subject Alternative Name)</h3>
+    <ul>
+        <li><strong>Symptom:</strong> Connection refused or hostname mismatch errors</li>
+        <li><strong>Solution:</strong> Regenerate certificate with correct SANs</li>
+        <li><strong>Prevention:</strong> Include all IP addresses and hostnames when generating</li>
+    </ul>
+    
+    <h3>Certificate Not Trusted</h3>
+    <ul>
+        <li><strong>Symptom:</strong> TLS handshake failure, unknown CA errors</li>
+        <li><strong>Solution:</strong> Ensure proper CA chain and root certificate trust</li>
+        <li><strong>Prevention:</strong> Use proper PKI infrastructure</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check-circle"></i> Best Practices</h2>
+    <div class="success-box">
+        <ul>
+            <li>✓ Monitor certificate expiration dates closely</li>
+            <li>✓ Automate certificate renewal with cert-manager</li>
+            <li>✓ Include all necessary SANs when generating</li>
+            <li>✓ Keep certificate backup procedures in place</li>
+            <li>✓ Rotate certificates regularly (annually minimum)</li>
+            <li>✓ Use strong key sizes (2048-bit RSA minimum, 4096-bit recommended)</li>
+            <li>✓ Document certificate generation and renewal procedures</li>
+            <li>✓ Test certificate updates in staging first</li>
+            <li>✓ Plan certificate renewal before expiration</li>
+            <li>✓ Use cert-manager for automatic renewals</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes Security Hub | Comprehensive Security Guide</title>
+    <meta name="description" content="Complete guide to Kubernetes security: RBAC, network policies, secrets, compliance, and more">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Root Variables */
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --accent: #06b6d4;
+            --danger: #ef4444;
+            --bg-light: #f8fafc;
+            --bg-card: #ffffff;
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,96C1248,75,1344,53,1392,42.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header p {
+            font-size: 1.125rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        main {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .intro-section {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+        }
+
+        .intro-section h2 {
+            font-size: 1.875rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .intro-section p {
+            color: var(--text-gray);
+            font-size: 1.125rem;
+            line-height: 1.75;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .nav-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--danger);
+            cursor: pointer;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-left-color: var(--primary);
+        }
+
+        .nav-card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .nav-card h3 {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .nav-card p {
+            color: var(--text-gray);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        .nav-card a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .category-section {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-size: 1.75rem;
+            color: var(--danger);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .category-title i {
+            color: var(--danger);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--danger);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            gap: 0.75rem;
+            color: var(--primary);
+        }
+
+        .back-link i {
+            transition: transform 0.3s ease;
+        }
+
+        .back-link:hover i {
+            transform: translateX(-3px);
+        }
+
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        footer p {
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        footer a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                padding: 2rem 1rem;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-card {
+            animation: fadeIn 0.6s ease-out backwards;
+        }
+
+        .nav-card:nth-child(1) { animation-delay: 0.1s; }
+        .nav-card:nth-child(2) { animation-delay: 0.2s; }
+        .nav-card:nth-child(3) { animation-delay: 0.3s; }
+        .nav-card:nth-child(4) { animation-delay: 0.4s; }
+        .nav-card:nth-child(5) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-shield-alt"></i> Kubernetes Security Hub</h1>
+        <p>Complete Guide to Securing Your Kubernetes Clusters</p>
+    </header>
+
+    <main>
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <section class="intro-section">
+            <h2><i class="fas fa-lock"></i> Security First Approach</h2>
+            <p>
+                Kubernetes security is multi-layered and requires attention at every level - from cluster infrastructure 
+                to application deployment. This comprehensive hub covers all aspects of securing your Kubernetes clusters, 
+                protecting your data, ensuring compliance, and implementing best practices for production environments.
+            </p>
+            <p style="margin-top: 1rem;">
+                <strong>Topics Covered:</strong> Authentication, Authorization, Network Security, Secrets Management, 
+                Pod Security, API Server Hardening, Audit Logging, Supply Chain Security, Compliance Standards, and more.
+            </p>
+        </section>
+
+        <!-- Access Control & Authentication -->
+        <div class="category-section">
+            <h2 class="category-title"><i class="fas fa-user-lock"></i> Access Control & Authentication</h2>
+            <div class="nav-grid">
+                <div class="nav-card">
+                    <a href="k8s_security_index.html">
+                        <div class="nav-card-icon"><i class="fas fa-lock"></i></div>
+                        <h3>Security Overview</h3>
+                        <p>Cluster security fundamentals, authentication methods, authorization frameworks, and security architecture.</p>
+                    </a>
+                </div>
+                <div class="nav-card">
+                    <a href="rbac_setup.html">
+                        <div class="nav-card-icon"><i class="fas fa-user-shield"></i></div>
+                        <h3>RBAC Setup & Management</h3>
+                        <p>Configure roles, service accounts, role bindings, and implement fine-grained access control policies.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network & Pod Security -->
+        <div class="category-section">
+            <h2 class="category-title"><i class="fas fa-network-wired"></i> Network & Pod Security</h2>
+            <div class="nav-grid">
+                <div class="nav-card">
+                    <a href="network_policies.html">
+                        <div class="nav-card-icon"><i class="fas fa-network-wired"></i></div>
+                        <h3>Network Policies & Isolation</h3>
+                        <p>Pod-to-pod communication control, network segmentation, ingress/egress rules, and network security best practices.</p>
+                    </a>
+                </div>
+                <div class="nav-card">
+                    <a href="pod_security.html">
+                        <div class="nav-card-icon"><i class="fas fa-cube"></i></div>
+                        <h3>Pod Security & Standards</h3>
+                        <p>Pod security policies, security contexts, privilege escalation prevention, and container isolation techniques.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Protection & Secrets -->
+        <div class="category-section">
+            <h2 class="category-title"><i class="fas fa-key"></i> Data Protection & Secrets</h2>
+            <div class="nav-grid">
+                <div class="nav-card">
+                    <a href="secrets_management.html">
+                        <div class="nav-card-icon"><i class="fas fa-key"></i></div>
+                        <h3>Secrets & Data Protection</h3>
+                        <p>Kubernetes secrets, encryption at rest, secret rotation, and secure credential management strategies.</p>
+                    </a>
+                </div>
+                <div class="nav-card">
+                    <a href="certificate_management.html">
+                        <div class="nav-card-icon"><i class="fas fa-certificate"></i></div>
+                        <h3>Certificate Management</h3>
+                        <p>TLS/SSL certificates, certificate signing requests, automated certificate management, and PKI setup.</p>
+                    </a>
+                </div>
+                <div class="nav-card">
+                    <a href="etcd_security.html">
+                        <div class="nav-card-icon"><i class="fas fa-database"></i></div>
+                        <h3>etcd Security & Backup</h3>
+                        <p>etcd encryption, secure communication, backup strategies, disaster recovery, and data protection.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Infrastructure & API Security -->
+        <div class="category-section">
+            <h2 class="category-title"><i class="fas fa-server"></i> Infrastructure & API Security</h2>
+            <div class="nav-grid">
+                <div class="nav-card">
+                    <a href="api_server_security.html">
+                        <div class="nav-card-icon"><i class="fas fa-server"></i></div>
+                        <h3>API Server Security</h3>
+                        <p>API server hardening, authentication mechanisms, encryption, audit logging, and API security best practices.</p>
+                    </a>
+                </div>
+                <div class="nav-card">
+                    <a href="audit_logging_monitoring.html">
+                        <div class="nav-card-icon"><i class="fas fa-history"></i></div>
+                        <h3>Audit Logging & Monitoring</h3>
+                        <p>Kubernetes audit logs, event tracking, security monitoring, threat detection, and forensics analysis.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supply Chain & Container Security -->
+        <div class="category-section">
+            <h2 class="category-title"><i class="fas fa-boxes"></i> Supply Chain & Container Security</h2>
+            <div class="nav-grid">
+                <div class="nav-card">
+                    <a href="image-scanning-registry.html">
+                        <div class="nav-card-icon"><i class="fas fa-search"></i></div>
+                        <h3>Image Scanning & Registry</h3>
+                        <p>Container image vulnerability scanning, registry security, image signing, and supply chain security.</p>
+                    </a>
+                </div>
+                <div class="nav-card">
+                    <a href="supply_chain_security.html">
+                        <div class="nav-card-icon"><i class="fas fa-boxes"></i></div>
+                        <h3>Supply Chain Security</h3>
+                        <p>End-to-end supply chain protection, image provenance, artifact signing, and secure deployment pipelines.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compliance & Standards -->
+        <div class="category-section">
+            <h2 class="category-title"><i class="fas fa-check-circle"></i> Compliance & Standards</h2>
+            <div class="nav-grid">
+                <div class="nav-card">
+                    <a href="compliance_standards.html">
+                        <div class="nav-card-icon"><i class="fas fa-check-circle"></i></div>
+                        <h3>Compliance & Standards</h3>
+                        <p>CIS benchmarks, PCI-DSS, HIPAA, SOC 2 compliance, regulatory requirements, and compliance validation.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p><i class="fas fa-heart"></i> Built with passion for the Cloud-Native community</p>
+        <p>&copy; 2025 Kubernetes Insights</p>
+    </footer>
+</body>
+</html>

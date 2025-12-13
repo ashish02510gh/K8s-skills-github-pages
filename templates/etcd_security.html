@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}etcd Security & Backup | Kubernetes Security{% endblock %}
+{% block description %}etcd encryption, secure communication, backup strategies, disaster recovery, and data protection.{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-database"></i> etcd Security</h1>
+<p>Protecting the Kubernetes Cluster Database</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h2><i class="fas fa-shield-alt"></i> etcd Overview</h2>
+    <p>
+        etcd is the distributed key-value store that holds all cluster data. Securing etcd is critical because it contains 
+        sensitive information like secrets, credentials, and the entire cluster state. Unauthorized access to etcd means complete 
+        cluster compromise.
+    </p>
+    <div class="danger-box">
+        <strong>🔴 Critical:</strong> etcd is the most sensitive component in a Kubernetes cluster. It must be protected with the highest priority.
+    </div>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-lock"></i> Encryption at Rest</h2>
+    
+    <h3>Enable Encryption Provider</h3>
+    <p>Configure API server to encrypt secrets before storing in etcd:</p>
+    <pre><code>--encryption-provider-config=/etc/kubernetes/encryption-config.yaml
+--encryption-provider-config-automatic-reload=true</code></pre>
+    
+    <h3>Encryption Configuration</h3>
+    <pre><code>apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+- resources:
+  - secrets
+  providers:
+  - aescbc:
+      keys:
+      - name: key1
+        secret: rWtsy+O4008S2Z5+DcjokQ==
+  - identity: {}</code></pre>
+    
+    <h3>Using KMS Plugin</h3>
+    <pre><code>providers:
+- kms:
+    apiVersion: v1
+    cachesize: 1000
+    endpoint: unix:///var/run/kmsplugin/socket.sock
+    timeout: 3s</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-network-wired"></i> Secure Communication</h2>
+    
+    <h3>Peer Communication</h3>
+    <ul>
+        <li>Enable TLS for peer-to-peer communication</li>
+        <li>Use peer certificates (etcd-peer.crt/key)</li>
+        <li>Verify peer certificates</li>
+    </ul>
+    
+    <h3>Client Communication</h3>
+    <ul>
+        <li>Enforce TLS for client connections</li>
+        <li>Require client certificates</li>
+        <li>Validate client certificates</li>
+    </ul>
+    
+    <h3>Configuration</h3>
+    <pre><code># etcd server flags
+--cert-file=/etc/kubernetes/pki/etcd/server.crt
+--key-file=/etc/kubernetes/pki/etcd/server.key
+--peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
+--peer-key-file=/etc/kubernetes/pki/etcd/peer.key
+--peer-client-cert-auth=true
+--client-cert-auth=true</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-shield"></i> Access Control</h2>
+    
+    <h3>Authentication</h3>
+    <ul>
+        <li>Only API server should access etcd</li>
+        <li>Use service accounts for authentication</li>
+        <li>Restrict network access to etcd</li>
+    </ul>
+    
+    <h3>Network Isolation</h3>
+    <ul>
+        <li>Place etcd on internal network only</li>
+        <li>Restrict firewall rules to control plane nodes</li>
+        <li>Use separate subnet for etcd</li>
+    </ul>
+    
+    <h3>Backup Protection</h3>
+    <ul>
+        <li>Encrypt backups</li>
+        <li>Store in secure location</li>
+        <li>Limit access to backup files</li>
+        <li>Test backup restoration regularly</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-copy"></i> Backup Strategies</h2>
+    
+    <h3>Regular Backups</h3>
+    <pre><code># Backup etcd data
+etcdctl snapshot save /backup/etcd-backup.db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key</code></pre>
+    
+    <h3>Verification</h3>
+    <pre><code># Verify backup integrity
+etcdctl snapshot status /backup/etcd-backup.db</code></pre>
+    
+    <h3>Automated Backups</h3>
+    <ul>
+        <li>Use CronJob to backup regularly</li>
+        <li>Backup frequency: daily minimum</li>
+        <li>Retention: keep 7-30 days</li>
+        <li>Store in multiple locations (on-premise + cloud)</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-recycle"></i> Disaster Recovery</h2>
+    
+    <h3>Restore from Snapshot</h3>
+    <pre><code># Restore etcd from snapshot
+etcdctl snapshot restore /backup/etcd-backup.db \
+  --data-dir=/var/lib/etcd-restored
+
+# Replace etcd data directory
+sudo mv /var/lib/etcd /var/lib/etcd-old
+sudo mv /var/lib/etcd-restored /var/lib/etcd
+
+# Restart etcd
+sudo systemctl restart etcd</code></pre>
+    
+    <h3>Testing Restores</h3>
+    <ul>
+        <li>Test restore procedures regularly</li>
+        <li>Practice in staging environment first</li>
+        <li>Document recovery procedures</li>
+        <li>Time the recovery process</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check-circle"></i> Best Practices</h2>
+    <div class="success-box">
+        <ul>
+            <li>✓ Always encrypt data in etcd using KMS</li>
+            <li>✓ Enable TLS for all etcd communications</li>
+            <li>✓ Restrict network access to etcd (control plane only)</li>
+            <li>✓ Implement daily backups</li>
+            <li>✓ Store backups in multiple locations</li>
+            <li>✓ Test restoration procedures monthly</li>
+            <li>✓ Keep backup encryption keys separate</li>
+            <li>✓ Monitor etcd disk usage and performance</li>
+            <li>✓ Enable etcd audit logging</li>
+            <li>✓ Implement defragmentation schedule</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

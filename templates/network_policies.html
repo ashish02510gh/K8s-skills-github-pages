@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Network Policies & Isolation | Kubernetes Security{% endblock %}
+{% block description %}Pod-to-pod communication control, network segmentation, ingress/egress rules, and network security best practices.{% endblock %}
+
+{% block page_header %}
+<h1><i class="fas fa-network-wired"></i> Network Policies</h1>
+<p>Pod-to-Pod Communication Control & Network Isolation</p>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h2><i class="fas fa-shield-alt"></i> Network Policies Overview</h2>
+    <p>
+        Network Policies define rules for network traffic between pods. By default, Kubernetes allows all pod-to-pod communication. 
+        Network Policies implement a zero-trust model where you explicitly allow required traffic.
+    </p>
+    <div class="info-box">
+        <strong>💡 Key Concept:</strong> Think of Network Policies as firewall rules for pods. They control ingress (incoming) and 
+        egress (outgoing) traffic based on labels and selectors.
+    </div>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-project-diagram"></i> Network Policy Basics</h2>
+    
+    <h3>Pod Selection</h3>
+    <ul>
+        <li>Use label selectors to target pods</li>
+        <li>Target specific namespaces</li>
+        <li>Combine multiple selectors with AND logic</li>
+    </ul>
+    
+    <h3>Traffic Direction</h3>
+    <ul>
+        <li><strong>Ingress:</strong> Incoming traffic to pods</li>
+        <li><strong>Egress:</strong> Outgoing traffic from pods</li>
+        <li>Both can be controlled independently</li>
+    </ul>
+    
+    <h3>Traffic Types</h3>
+    <ul>
+        <li>Pod-to-pod within namespace</li>
+        <li>Pod-to-pod across namespaces</li>
+        <li>Ingress controller to pod</li>
+        <li>Pod to external services</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-code"></i> Network Policy Examples</h2>
+    
+    <h3>1. Deny All Traffic</h3>
+    <p>Start with default deny, then allow required traffic (zero-trust approach):</p>
+    <pre><code>apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+  namespace: production
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress</code></pre>
+    
+    <h3>2. Allow Frontend to Backend</h3>
+    <p>Allow specific traffic between application tiers:</p>
+    <pre><code>apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-backend
+  namespace: production
+spec:
+  podSelector:
+    matchLabels:
+      tier: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          tier: frontend
+    ports:
+    - protocol: TCP
+      port: 8080</code></pre>
+    
+    <h3>3. Allow from External Ingress</h3>
+    <p>Allow traffic from ingress controller:</p>
+    <pre><code>apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-ingress
+  namespace: production
+spec:
+  podSelector:
+    matchLabels:
+      app: web
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 80</code></pre>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-check-circle"></i> Best Practices</h2>
+    <ul>
+        <li>Start with deny-all and explicitly allow required traffic</li>
+        <li>Use meaningful label conventions (tier, app, env)</li>
+        <li>Label namespaces for cross-namespace policies</li>
+        <li>Test policies thoroughly in staging first</li>
+        <li>Document traffic requirements</li>
+        <li>Monitor denied traffic using network logging</li>
+        <li>Use tools like Cilium to view traffic flows</li>
+    </ul>
+</section>
+
+<section class="content-section">
+    <h2><i class="fas fa-lightbulb"></i> Advanced Networking</h2>
+    <ul>
+        <li><strong>Cilium:</strong> eBPF-based networking and security</li>
+        <li><strong>Calico:</strong> Enterprise-grade networking and policy</li>
+        <li><strong>Istio/Linkerd:</strong> Service mesh for advanced control</li>
+        <li><strong>Network Logging:</strong> Monitor denied connections</li>
+        <li><strong>DNS Policies:</strong> Control DNS resolution</li>
+    </ul>
+</section>
+{% endblock %}
